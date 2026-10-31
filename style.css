@@ -558,12 +558,13 @@ details[open] summary::before { content: "▼ "; }
 .confetti { position: absolute; inset: 0; z-index: 2; pointer-events: none; }        /* 창 앞으로 쏟아지게 */
 .confetti i {
   position: absolute; top: -12px; width: 8px; height: 8px; box-shadow: 2px 2px 0 rgba(0, 0, 0, .25);
-  animation-name: confetti; animation-timing-function: steps(24); animation-fill-mode: both;
-  animation-iteration-count: 2;
+  animation-name: confetti; animation-timing-function: steps(24); animation-fill-mode: backwards;
+  animation-iteration-count: 2;                       /* 다 떨어지면 처음 자리(창 위 밖)로 돌아가 사라진다 — 바닥에 쌓이지 않게 */
 }
 .confetti i:nth-child(3n) { width: 6px; height: 12px; }
 @keyframes confetti {
-  to { transform: translateY(105vh) rotate(540deg); }
+  85% { opacity: 1; }
+  to { transform: translateY(105vh) rotate(540deg); opacity: 0; }
 }
 
 @media (min-width: 420px) { .grid { gap: 12px; } }

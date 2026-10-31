@@ -111,6 +111,7 @@ function showLevelup(from, to) {
   $("lu-ok").textContent = top ? "대표이사로 취임하기 ▶" : "다음 승진 도전 ▶";
   $("lu-confetti").innerHTML = "";
   $("levelup").hidden = false;
+  fitOverlays();
   $("lu-ok").focus();                              // 뜨자마자 Enter 로 닫을 수 있게
   if (top) { confetti($("lu-confetti")); fanfare(); }   // 대표이사 취임은 출근 완료처럼 꽃가루 · 빵빠레
 }
@@ -341,6 +342,19 @@ function renderCommute() {
   try { localStorage.setItem(COMMUTE_KEY, String(got)); } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ }
 }
 
+/* 축하 창을 지금 눈에 보이는 화면에 딱 맞춘다 — 폰 브라우저는 가끔 position: fixed 의 기준(레이아웃 뷰포트)을
+   실제 화면보다 넓거나 짧게 잡아서, inset: 0 만으로는 창이 옆으로 밀리고 꽃가루가 화면 중간에 쌓인다 */
+function fitOverlays() {
+  const v = window.visualViewport;
+  if (!v) return;
+  document.querySelectorAll(".levelup").forEach((o) => Object.assign(o.style, {
+    left: `${v.offsetLeft}px`, top: `${v.offsetTop}px`, right: "auto", bottom: "auto",
+    width: `${v.width}px`, height: `${v.height}px`,
+  }));
+}
+window.visualViewport?.addEventListener("resize", fitOverlays);
+window.visualViewport?.addEventListener("scroll", fitOverlays);
+
 /* 픽셀 꽃가루 — 출근 완료 · 대표이사 취임 창이 같이 쓴다 */
 function confetti(box) {
   const colors = ["#e8352e", "#f9e04b", "#7fd05a", "#3d6fb0", "#ffffff", "#e8972e"];
@@ -354,6 +368,7 @@ function confetti(box) {
 function celebrate() {
   confetti($("confetti"));
   $("arrive").hidden = false;
+  fitOverlays();
   $("arrive-ok").focus();
   fanfare();
 }
