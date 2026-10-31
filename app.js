@@ -545,12 +545,16 @@ function renderNextStage() {
 }
 
 function choiceBody(q, mine) {
+  // 슬라이더 결과와 같은 약속 — 회사원 그림 = 내 답, 별 = 정답. 표시는 보기 앞에 두어 문장과 섞이지 않게
+  const me = `<svg class="pi"><use href="#px-me"/></svg>`;
+  const star = `<svg class="pi"><use href="#px-star"/></svg>`;
   const label = (o) => {
     const cls = o === q.answer && o === mine ? "both"
       : o === q.answer ? "real" : o === mine ? "mine" : "";
-    const tag = o === q.answer && o === mine ? " 실제 · 내 답"
-      : o === q.answer ? " 실제" : o === mine ? " 내 답" : "";
-    return `<span class="pill ${cls}">${o}${tag}</span>`;
+    const tag = o === q.answer && o === mine ? `${me}${star}<b class="lbl">내 답 · 정답</b>`
+      : o === q.answer ? `${star}<b class="lbl">정답</b>`
+      : o === mine ? `${me}<b class="lbl">내 답</b>` : "";
+    return `<span class="pill ${cls}">${tag}<span>${o}</span></span>`;
   };
   return `<div class="pills">${q.options.map(label).join("")}</div>`;
 }

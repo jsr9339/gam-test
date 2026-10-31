@@ -483,7 +483,7 @@ def build_labor():
     k_dmg = pick(SAFE, "제15조", r"손해액의 (\d+)배", 1)
     k_small = pick(SAFE, "제3조", r"상시 근로자가 (\d+)명 미만")
     law_topic(
-        "labor-safety", "⛑️", "산업재해와 근로자의 안전보건 권리",
+        "labor-safety", "⛑️", "산업재해와\n근로자의 안전보건 권리",
         "중대재해처벌법이 정한 선", [SAFE], [
             slider("sf1", "사망자가 몇 명 이상 나면\n«중대산업재해»일까요?",
                    k_dead, "명", 0, 10, 1,
@@ -519,7 +519,7 @@ def build_labor():
     c_claim = pick(FIX, "제9조", r"종료일\)부터 (\d+)개월", 1)
     c_trial = pick(MW, "제5조", r"수습을 시작한 날부터 (\d+)개월 이내", 2)
     law_topic(
-        "labor-contract", "📝", "수습·시용·계약직 근로자의 권리",
+        "labor-contract", "📝", "수습·시용·계약직\n근로자의 권리",
         "기간제 · 단시간 · 수습이 알아야 할 숫자", [FIX, MW], [
             slider("ct1", "계약직(기간제)은\n최대 몇 년까지\n쓸 수 있을까요?",
                    c_year, "년", 0, 10, 1,
@@ -559,7 +559,7 @@ def build_labor():
     d_total = pick(KLS, "제95조", r"임금 총액의 (\d+)분의 1")
     PAPER = ["효력 없음", "효력 있음", "30일 뒤부터 효력", "본인이 동의하면 효력"]
     law_topic(
-        "labor-dismiss", "⚖️", "해고와 징계, 회사 마음대로 할 수 있을까?",
+        "labor-dismiss", "⚖️", "해고와 징계,\n회사 마음대로 할 수 있을까?",
         "통보 방법, 대응 기한, 감봉의 한도", [KLS], [
             slider("ds1", "예고 없이 바로 해고되면\n통상임금 며칠분을\n받을 수 있을까요?",
                    d_pay, "일분", 0, 90, 1,
