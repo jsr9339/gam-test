@@ -134,7 +134,7 @@
 
 <main id="app">
 
-  <!-- 레벨 · 하트 — 모든 화면 맨 위 -->
+  <!-- 레벨 · 하트 — 문항 · 결과 화면에서는 맨 위, 첫 화면에서는 노선도 바로 위 -->
   <header id="hud" class="hud">
     <span id="hud-lv" class="hud-lv">LV 1</span>
     <span class="hud-mid">
@@ -159,12 +159,13 @@
         <svg class="coin" aria-hidden="true"><use href="#px-coin"/></svg>
       </p>
     </div>
+    <!-- 첫 화면에서는 레벨 · 하트 줄이 여기(노선도 바로 위)로 옮겨 온다 — app.js show() -->
+    <div id="hud-home-slot"></div>
     <!-- 출근길 노선도 — 맞힌 문제(하트) 수만큼 회사원이 집에서 회사 쪽으로 간다 -->
     <div class="commute">
       <div class="commute-head"><span>출근길 노선도</span><span id="commute-note"></span></div>
       <div id="metro" class="metro"></div>
     </div>
-    <p id="progress-note" class="fineprint" style="text-align:left"></p>
     <div id="topic-grid" class="grid"></div>
     <p class="fineprint">모든 정답은 법령 원문에서 직접 뽑았습니다.<br>
       결과 화면의 <b>근거 보기</b>를 누르면 어디서 뽑았는지 나옵니다.</p>

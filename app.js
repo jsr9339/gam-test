@@ -134,6 +134,10 @@ const units = (s) => s.split("\n").map((u) => `<span class="unit">${u}</span>`).
 
 function show(name) {
   Object.entries(views).forEach(([k, el]) => (el.hidden = k !== name));
+  // 첫 화면에서는 레벨 줄을 노선도 바로 위로 — 둘 다 모은 하트로 정해지는 진행이라 붙여 둔다
+  const hud = $("hud");
+  if (name === "home") $("hud-home-slot").appendChild(hud);
+  else views.home.before(hud);
   window.scrollTo({ top: 0 });
 }
 
@@ -156,6 +160,7 @@ async function boot() {
 
   renderHud();
   renderGrid();
+  $("hud-home-slot").appendChild($("hud"));       // 처음 보이는 화면이 첫 화면이라 레벨 줄을 노선도 위로
   $("lu-ok").onclick = () => ($("levelup").hidden = true);
   $("btn-next").onclick = next;
   $("btn-back").onclick = () => show("home");
@@ -170,9 +175,6 @@ async function boot() {
 function renderGrid() {
   const done = doneMap();
   const hearts = heartMap();
-  const n = INDEX.topics.filter((t) => t.id in done).length;
-  $("progress-note").textContent =
-    n ? `${INDEX.topics.length}개 스테이지 중 ${n}개 클리어` : "";
   $("topic-grid").innerHTML = "";
   INDEX.topics.forEach((t, i) => {
     const b = document.createElement("button");
@@ -204,7 +206,9 @@ function renderCommute() {
   let prev = got;                                   // 지난번에 서 있던 자리 — 거기서 걸어온다
   try { prev = Math.min(Number(localStorage.getItem(COMMUTE_KEY) ?? got), got); } catch { /* 저장이 막혀 있으면 걷지 않는다 */ }
 
-  $("commute-note").textContent = got >= max ? "출근 완료!" : `회사까지 하트 ${max - got}개`;
+  // 회사원 앞에 남은 역 수 — 역 위에 서 있으면 그 역은 지난 것으로 센다
+  const left = STOPS.filter((_, i) => (i / (STOPS.length - 1)) * 100 > at(got)).length;
+  $("commute-note").textContent = left ? `회사까지 ${left}정거장` : "출근 완료!";
   $("metro").setAttribute("aria-label", `출근길 ${got} / ${max}`);
   $("metro").innerHTML =
     `<span class="rail"></span><span class="rail-done" style="width:${at(got)}%"></span>` +

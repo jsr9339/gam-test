@@ -192,7 +192,6 @@ svg.hp.off { opacity: .55; }
 
 .banner { background: var(--panel); padding: 12px 14px; font-size: 14px; margin: 0 0 12px; }
 .banner b { color: var(--red); }
-#progress-note { font-family: var(--pixel); color: var(--ink); opacity: 1; font-size: 13px; margin: 0 2px 8px; }
 
 /* ── 출근길 노선도 — 집에서 회사까지 7개 역, 맞힌 문제(하트)만큼 회사원이 간다 ── */
 .commute {
