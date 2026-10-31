@@ -36,8 +36,9 @@ function markDone(id, score) {
 const HEART_KEY = "gam-test-hearts";
 const HEART_PCT = 20;
 const PER_LEVEL = 5;
+// 하트 5개마다 한 직급 — 12스테이지 × 5문제 = 하트 60개로 마지막 직급(13번째)에 닿게 13개로 맞춘다
 const RANKS = ["인턴", "수습사원", "사원", "주임", "대리", "과장", "차장",
-               "부장", "이사", "상무", "전무", "부사장", "사장", "노동법 마스터"];
+               "부장", "이사", "상무", "전무", "사장", "대표이사"];
 let stageHits = [];
 
 function heartMap() {
@@ -73,6 +74,15 @@ function renderHud() {
   $("hud-title").textContent = L.rank;
   $("hud-xp").style.width = `${L.pct}%`;
   $("hud-total").textContent = total;
+}
+/* 승진 창 — 마지막 직급(대표이사)에 오르면 «다음 승진»이 없으니 문구를 바꾼다 */
+function showLevelup(from, to) {
+  const top = to === RANKS.length;
+  $("lu-sub").textContent = top ? "축하합니다! 최고 직급에 올랐어요" : "축하합니다! 승진했어요";
+  $("lu-lv").textContent = `LV ${from} ▶ LV ${to}`;
+  $("lu-title").textContent = RANKS[to - 1];
+  $("lu-ok").textContent = top ? "대표이사로 취임하기 ▶" : "다음 승진 도전 ▶";
+  $("levelup").hidden = false;
 }
 function renderStageHearts() {
   $("stage-hearts").innerHTML = PACK.questions
@@ -173,6 +183,8 @@ async function boot() {
   }
   // ?celebrate — 12개를 다 풀지 않아도 출근 완료 축하를 미리 본다(진행 기록은 그대로)
   if (p.has("celebrate")) setTimeout(celebrate, 600);
+  // ?levelup — 마지막 승진(대표이사) 창을 미리 본다(진행 기록은 그대로)
+  if (p.has("levelup")) showLevelup(RANKS.length - 1, RANKS.length);
 }
 
 function renderGrid() {
@@ -359,11 +371,7 @@ function renderResult() {
     (got > best ? (best ? ` · 최고 기록 갱신 (+${got - best})` : "") : best ? ` · 최고 기록 ${best}개` : "") +
     `</span>`;
   if (after.lv > before.lv) {
-    setTimeout(() => {
-      $("lu-lv").textContent = `LV ${before.lv} ▶ LV ${after.lv}`;
-      $("lu-title").textContent = after.rank;
-      $("levelup").hidden = false;
-    }, PACK.questions.length * 180 + 500);
+    setTimeout(() => showLevelup(before.lv, after.lv), PACK.questions.length * 180 + 500);
   }
 
   const box = $("cards");
