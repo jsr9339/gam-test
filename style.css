@@ -285,6 +285,7 @@ svg.hp.off { opacity: .55; }
 .tcard.done { background: #fffbd0; }
 .tstage { font-family: var(--arcade); font-size: 8px; color: var(--muted); }
 .temoji { font-size: 24px; line-height: 1.1; }
+.temoji-px { display: block; width: 28px; height: 28px; }  /* 이모지가 없는 그림은 도트로 — 이모지와 같은 크기로 */
 .ttitle { font-size: 15px; font-weight: 800; letter-spacing: -.01em; line-height: 1.4; white-space: pre-line; }
 .tstart {
   display: block; margin-top: auto; padding: 7px 0; text-align: center;
@@ -294,7 +295,7 @@ svg.hp.off { opacity: .55; }
 
 /* 맨 아래 두 칸(다시 풀기 · 프리패스권) — 스테이지 카드와 같은 틀, 버튼만 남색 */
 .tcard.tool { background: #eef4ff; }
-.tcard.tool .tstart { background: var(--night); font-family: var(--pixel); font-size: 13px; padding: 5px 0; }
+.tcard.tool .tstart { background: var(--night); }
 .tcard.tool.off { cursor: default; opacity: .6; }
 .tcard.tool.off:active { transform: none; }
 .tnote { font-size: 11.5px; color: var(--muted); line-height: 1.45; }

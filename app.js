@@ -252,7 +252,7 @@ function renderTools() {
   const r = $("btn-retry");
   r.classList.toggle("off", !wrong);
   r.innerHTML =
-    `<span class="tstage">REVIEW</span><span class="temoji">📝</span>` +
+    `<span class="tstage">REVIEW</span><span class="temoji"><svg class="temoji-px"><use href="#px-review"/></svg></span>` +
     `<span class="ttitle">틀린 문제만\n다시 풀기</span>` +
     `<span class="tnote">${wrong ? `틀린 문제 ${wrong}개 · 5개씩` : "다시 풀 문제가 없어요"}</span>` +
     `<span class="tstart">${wrong ? "START" : "CLEAR"}</span>`;
@@ -262,11 +262,11 @@ function renderTools() {
     ? `<span class="tstage">RESTART</span><span class="temoji">🏠</span>` +
       `<span class="ttitle">처음부터\n다시 출근하기</span>` +
       `<span class="tnote">하트 · 직급 · 노선도를 지우고 집에서 출발</span>` +
-      `<span class="tstart">다시 출근</span>`
+      `<span class="tstart">RESET</span>`
     : `<span class="tstage">FREE PASS</span><span class="temoji">🎫</span>` +
       `<span class="ttitle">출근 완료\n프리패스권</span>` +
       `<span class="tnote">문제를 건너뛰고 바로 회사로</span>` +
-      `<span class="tstart">사용하기</span>`;
+      `<span class="tstart">USE</span>`;
 }
 
 function usePass() {
