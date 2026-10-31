@@ -518,11 +518,12 @@ details[open] summary::before { content: "▼ "; }
   padding: 22px 18px 18px;
   animation: in .3s steps(4);
 }
-/* 하늘색 바탕과 꽃가루 위에서도 읽히게 진한 띠에 흰 글씨 — 꽃가루보다 앞에 둔다 */
+/* 하늘색 바탕과 꽃가루 위에서도 읽히게 흰 글씨에 진한 테두리 — 꽃가루보다 앞에 둔다 */
 .lu-sub {
-  display: inline-block; position: relative; z-index: 3;
-  font-size: 14px; font-weight: 700; color: #fff; line-height: 1.45;
-  background: var(--ink); padding: 5px 12px;
+  position: relative; z-index: 3;
+  font-size: 15px; font-weight: 800; color: #fff; line-height: 1.45;
+  text-shadow: 2px 0 0 var(--ink), -2px 0 0 var(--ink), 0 2px 0 var(--ink), 0 -2px 0 var(--ink),
+               2px 2px 0 var(--ink), -2px -2px 0 var(--ink), 2px -2px 0 var(--ink), -2px 2px 0 var(--ink);
 }
 .lu-big {
   font-family: var(--arcade); font-size: 34px; line-height: 1.35; margin: 14px 0 12px;
