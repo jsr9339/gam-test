@@ -241,7 +241,7 @@ function renderQ() {
   $("q-count").textContent = `${idx + 1} / ${PACK.questions.length}`;
   $("q-text").innerHTML = units(q.text);
   $("btn-next").textContent =
-    idx === PACK.questions.length - 1 ? "결과 보기" : "다음";
+    idx === PACK.questions.length - 1 ? "결과 보기" : "다음 업무 ▶";
 
   const isChoice = q.type === "choice";
   $("q-choice").hidden = !isChoice;
@@ -428,7 +428,7 @@ async function share() {
     if (navigator.share) { await navigator.share({ title: INDEX.title, text, url }); return; }
     await navigator.clipboard.writeText(`${text}\n${url}`);
     $("btn-share").textContent = "링크를 복사했습니다";
-    setTimeout(() => ($("btn-share").textContent = "친구에게 보내기"), 1800);
+    setTimeout(() => ($("btn-share").textContent = "동료에게 알려주기"), 1800);
   } catch { /* 사용자가 취소한 경우 */ }
 }
 
