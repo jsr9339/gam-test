@@ -84,9 +84,25 @@ body { display: flex; flex-direction: column; overflow-x: hidden; }
 .stopsign { position: absolute; left: 30%; bottom: -10px; width: 23px; height: 43px; }
 .worker { position: absolute; z-index: 1; bottom: -13px; width: 26px; height: 39px; overflow: visible; }
 .worker.w1 { left: 50%; animation: walk 16s linear infinite alternate, bob .6s steps(1) infinite; }
-.worker.w2 { left: 18%; animation: bob 1.4s steps(1) infinite .3s; }            /* 정류장에서 기다림 */
+/* w2 · w4 는 정류장에서 기다리다 버스(18초 주기)가 서면 문 쪽으로 걸어가 탄다 */
+.worker.w2 { left: 18%; animation: board-a 18s linear infinite, bob 1.4s steps(1) infinite .3s; }
 .worker.w3 { left: 88%; animation: walk-back 13s linear infinite alternate, bob .6s steps(1) infinite .2s; }
-.worker.w4 { left: 36%; animation: bob 1.8s steps(1) infinite; }               /* 정류장에서 기다림 */
+.worker.w4 { left: 36%; animation: board-b 18s linear infinite, bob 1.8s steps(1) infinite; }
+/* 버스 문은 27% 자리. 28% 에 버스가 서고 50% 에 떠난다 — 그 사이에 걸어가 타고(사라지고), 버스가 떠난 뒤 다음 사람이 나타난다 */
+@keyframes board-a {
+  0%, 30% { left: 18%; opacity: 1; }
+  38% { left: 25%; opacity: 1; }
+  41% { left: 25%; opacity: 0; }
+  92% { left: 18%; opacity: 0; }
+  100% { left: 18%; opacity: 1; }
+}
+@keyframes board-b {
+  0%, 32% { left: 36%; opacity: 1; }
+  40% { left: 29%; opacity: 1; }
+  43% { left: 29%; opacity: 0; }
+  92% { left: 36%; opacity: 0; }
+  100% { left: 36%; opacity: 1; }
+}
 @keyframes walk { to { translate: 70px 0; } }
 @keyframes walk-back { to { translate: -70px 0; } }
 
@@ -101,8 +117,18 @@ body { display: flex; flex-direction: column; overflow-x: hidden; }
 }
 @keyframes rumble { 50% { transform: translateY(-1px); } }
 
+/* 버스에 탄 두 사람 — 버스와 똑같이 움직이는 겹을 하나 더 두고, 탄 뒤(44%)부터 창문에 얼굴이 보인다.
+   창문은 버스 그림(28x14칸, 1칸 3.5px)의 세 · 네 번째 창 */
+.bus-riders { position: absolute; z-index: 3; bottom: -46px; left: calc(27% - 77px); width: 98px; height: 49px;
+  opacity: 0; animation: bus-run 18s infinite, rumble .4s steps(1) infinite, riders 18s steps(1) infinite; }
+.seat { position: absolute; top: 10px; width: 12px; height: 11px; overflow: hidden; }
+.seat svg { display: block; width: 12px; height: 18px; }
+.seat.s1 { left: 38px; }
+.seat.s2 { left: 52px; }
+@keyframes riders { 0%, 43% { opacity: 0; } 44%, 100% { opacity: 1; } }
+
 @media (prefers-reduced-motion: reduce) {
-  .cloud, .worker, .bus { animation: none; }          /* 버스는 정류장 앞에 서 있다 */
+  .cloud, .worker, .bus, .bus-riders { animation: none; }   /* 버스는 정류장 앞에 서 있고, 사람들은 기다린다 */
 }
 
 #app {
