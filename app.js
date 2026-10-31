@@ -28,27 +28,31 @@ function markDone(id, score) {
   } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ }
 }
 
-/* 문항마다 한 번이라도 맞혔는지 — «틀린 문제만 다시 풀기»가 여기서 고른다. { 주제: [true, false, …] } */
-const HITS_KEY = "gam-test-hits";
+/* 문항마다 한 번이라도 맞혔는지 — «틀린 문제만 다시 풀기»가 여기서 고른다. { 주제: { 문항 id: true | false } }
+   자리(몇 번째) 대신 문항 id 로 적어, 스테이지 안 문항 순서를 바꿔도 기록이 어긋나지 않는다 */
+const HITS_KEY = "gam-test-hits-by-id";
 const FREEPASS_KEY = "gam-test-freepass";     // 출근 완료 프리패스권을 썼는지
 const SOUND_KEY = "gam-test-sound";           // "off" 면 빵빠레를 울리지 않는다
 const store = {
   get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ } },
 };
-/* 이번에 맞힌 문항을 더한다(한 번 맞힌 문항은 맞힌 채로 남는다). 그 주제의 맞힌 문항 수를 돌려준다 */
-function addHits(id, i, hit, len = 5) {
+/* 이번 결과를 더한다(한 번 맞힌 문항은 맞힌 채로 남는다).
+   그 주제의 맞힌 문항 수와, 이번에 틀림 → 맞힘으로 바뀌었는지를 돌려준다 */
+function addHit(id, qid, hit) {
   const m = store.get(HITS_KEY, {});
-  const row = m[id] ?? Array(len).fill(false);
-  row[i] = row[i] || hit;
+  const row = m[id] ?? {};
+  const flipped = row[qid] === false && hit;
+  row[qid] = row[qid] === true || hit;
   m[id] = row;
   store.set(HITS_KEY, m);
-  return row.filter(Boolean).length;
+  return { count: Object.values(row).filter(Boolean).length, flipped };
 }
-/* 다시 풀 틀린 문항 — 끝낸 주제에서 아직 한 번도 못 맞힌 문항 */
+/* 다시 풀 틀린 문항 — 스테이지 순서, 그 안에서는 문항 순서대로. 아직 한 번도 못 맞힌 문항만 */
 function wrongList() {
   const m = store.get(HITS_KEY, {});
-  return INDEX.topics.flatMap((t) => (m[t.id] ?? []).map((h, i) => (h ? null : { id: t.id, i })).filter(Boolean));
+  return INDEX.topics.flatMap((t) =>
+    (t.qids ?? []).filter((q) => m[t.id]?.[q] === false).map((qid) => ({ id: t.id, qid })));
 }
 
 /* ── 하트 · 레벨 ─────────────────────────────────────
@@ -107,6 +111,7 @@ function showLevelup(from, to) {
   $("lu-ok").textContent = top ? "대표이사로 취임하기 ▶" : "다음 승진 도전 ▶";
   $("lu-confetti").innerHTML = "";
   $("levelup").hidden = false;
+  $("lu-ok").focus();                              // 뜨자마자 Enter 로 닫을 수 있게
   if (top) { confetti($("lu-confetti")); fanfare(); }   // 대표이사 취임은 출근 완료처럼 꽃가루 · 빵빠레
 }
 function renderStageHearts() {
@@ -175,7 +180,7 @@ async function boot() {
     const t = INDEX.topics.find((x) => x.id === p.get("t"));
     $("shared-banner").innerHTML =
       `친구가 ${t ? `<b>${t.emoji} ${t.title}</b> 에서 ` : ""}` +
-      `<b>${Number(p.get("s"))}점</b>` + (g ? `, <b>${g}</b> 등급을` : "을") + ` 받았습니다.` +
+      `<b>${Number(p.get("s"))}점</b>` + (g ? `, <b>${g}</b> 등급을` : "을") + ` 받았어요.` +
       (p.has("r") ? ` 지금 직급은 <b>${p.get("r")}</b>, ` +
         (Number(p.get("st")) ? `회사까지 <b>${Number(p.get("st"))}정거장</b> 남았어요.` : `<b>출근 완료!</b>`) : "") +
       ` 당신은요?`;
@@ -187,6 +192,10 @@ async function boot() {
   $("hud-home-slot").appendChild($("hud"));       // 처음 보이는 화면이 첫 화면이라 레벨 줄을 노선도 위로
   $("lu-ok").onclick = () => ($("levelup").hidden = true);
   $("arrive-ok").onclick = () => ($("arrive").hidden = true);
+  // Esc 로도 떠 있는 축하 · 승진 창을 닫는다(Enter 는 포커스가 간 버튼이 받는다)
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") ["levelup", "arrive"].forEach((id) => ($(id).hidden = true));
+  });
   $("btn-next").onclick = next;
   $("btn-back").onclick = () => show("home");
   $("btn-more").onclick = () => { renderGrid(); show("home"); };
@@ -282,7 +291,7 @@ async function startRetry() {
   for (const { id } of list) packs[id] ??= await (await fetch(`topics/${id}.json`)).json();
   PACK = {
     id: "retry", retry: true, emoji: "📝", title: "틀린 문제 다시 풀기", caveat: "",
-    questions: list.map(({ id, i }) => ({ ...packs[id].questions[i], _stage: id, _i: i })),
+    questions: list.map(({ id, qid }) => ({ ...packs[id].questions.find((q) => q.id === qid), _stage: id })),
   };
   idx = 0; answers = []; stageHits = [];
   $("topic-name").textContent = `${PACK.emoji} ${PACK.title}`;
@@ -345,6 +354,7 @@ function confetti(box) {
 function celebrate() {
   confetti($("confetti"));
   $("arrive").hidden = false;
+  $("arrive-ok").focus();
   fanfare();
 }
 
@@ -448,10 +458,13 @@ function renderResult() {
   const got = hits.filter(Boolean).length;
   const before = levelOf(totalHearts());
   const best = PACK.retry ? 0 : heartMap()[PACK.id] ?? 0;
-  // 맞힌 문항을 원래 주제에 더하고, 그 주제의 하트를 «한 번이라도 맞힌 문항 수»로 맞춘다
+  // 맞힌 문항을 원래 주제에 더하고 그 주제의 하트를 올린다.
+  // 다시 풀기에서 틀림 → 맞힘이 되면 원래 스테이지 하트를 하나 더한다(5개까지) — 예전 기록과 어긋나도 꼭 오르게
   PACK.questions.forEach((q, i) => {
     const id = PACK.retry ? q._stage : PACK.id;
-    saveHearts(id, addHits(id, PACK.retry ? q._i : i, hits[i]));
+    const { count, flipped } = addHit(id, q.id, hits[i]);
+    const now = heartMap()[id] ?? 0;
+    saveHearts(id, PACK.retry && flipped ? Math.min(5, Math.max(now + 1, count)) : count);
   });
   const after = levelOf(totalHearts());
   renderHud();
@@ -499,6 +512,28 @@ function renderResult() {
     `출처 <a href="${PACK.source_url}" target="_blank" rel="noopener">${PACK.source}</a>`;
 
   requestAnimationFrame(() => setTimeout(animate, 60));
+  renderNextStage();
+}
+
+/* 다음 스테이지 바로 가기 — 지금 스테이지 뒤에서 아직 안 끝낸 첫 스테이지(없으면 바로 다음 스테이지).
+   다시 풀기 판이면 남은 틀린 문제를 더 푼다 */
+function renderNextStage() {
+  const b = $("btn-next-stage");
+  if (PACK.retry) {
+    const left = wrongList().length;
+    b.hidden = !left;
+    b.textContent = `틀린 문제 ${left}개 더 풀기 ▶`;
+    b.onclick = startRetry;
+    return;
+  }
+  const done = doneMap();
+  const at = INDEX.topics.findIndex((t) => t.id === PACK.id);
+  const after = INDEX.topics.slice(at + 1).concat(INDEX.topics.slice(0, at));
+  const next = after.find((t) => !(t.id in done)) ?? INDEX.topics[at + 1];
+  b.hidden = !next;
+  if (!next) return;
+  b.textContent = `다음 스테이지 ▶ STAGE ${INDEX.topics.indexOf(next) + 1} ${oneLine(next.title)}`;
+  b.onclick = () => start(next.id);
 }
 
 function choiceBody(q, mine) {
@@ -550,7 +585,7 @@ async function share() {
   try {
     if (navigator.share) { await navigator.share({ title: INDEX.title, text, url }); return; }
     await navigator.clipboard.writeText(`${text}\n${url}`);
-    $("btn-share").textContent = "링크를 복사했습니다";
+    $("btn-share").textContent = "링크를 복사했어요";
     setTimeout(() => ($("btn-share").textContent = "동료에게 알려주기"), 1800);
   } catch { /* 사용자가 취소한 경우 */ }
 }
