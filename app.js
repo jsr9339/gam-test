@@ -162,6 +162,7 @@ async function boot() {
   renderGrid();
   $("hud-home-slot").appendChild($("hud"));       // 처음 보이는 화면이 첫 화면이라 레벨 줄을 노선도 위로
   $("lu-ok").onclick = () => ($("levelup").hidden = true);
+  $("arrive-ok").onclick = () => ($("arrive").hidden = true);
   $("btn-next").onclick = next;
   $("btn-back").onclick = () => show("home");
   $("btn-more").onclick = () => { renderGrid(); show("home"); };
@@ -226,7 +227,36 @@ function renderCommute() {
     requestAnimationFrame(() => requestAnimationFrame(() => { r.style.left = `${at(got)}%`; }));
     r.addEventListener("transitionend", () => r.classList.remove("walking"), { once: true });
   }
+  // 이번에 막 회사에 닿았으면 회사원이 다 걸어간 뒤(1.2초) 한 번 축하한다
+  if (prev < max && got === max) setTimeout(celebrate, 1300);
   try { localStorage.setItem(COMMUTE_KEY, String(got)); } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ }
+}
+
+/* 출근 완료 축하 — 픽셀 꽃가루 + 8비트 빵빠레 */
+function celebrate() {
+  const colors = ["#e8352e", "#f9e04b", "#7fd05a", "#3d6fb0", "#ffffff", "#e8972e"];
+  $("confetti").innerHTML = Array.from({ length: 48 }, (_, i) =>
+    `<i style="left:${Math.random() * 100}%;background:${colors[i % colors.length]};` +
+    `animation-delay:${(Math.random() * 1.2).toFixed(2)}s;animation-duration:${(2.2 + Math.random() * 1.6).toFixed(2)}s"></i>`
+  ).join("");
+  $("arrive").hidden = false;
+  fanfare();
+}
+
+function fanfare() {
+  try {
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    // 빠 · 바 · 바 · 밤! — 도 · 미 · 솔 · 높은 도, 마지막은 길게
+    [[523, 0, .12], [659, .13, .12], [784, .26, .12], [1047, .39, .55], [784, .98, .1], [1047, 1.1, .7]]
+      .forEach(([hz, at, len]) => {
+        const o = ac.createOscillator(), g = ac.createGain();
+        o.type = "square"; o.frequency.value = hz;
+        g.gain.setValueAtTime(.08, ac.currentTime + at);
+        g.gain.exponentialRampToValueAtTime(.001, ac.currentTime + at + len);
+        o.connect(g).connect(ac.destination);
+        o.start(ac.currentTime + at); o.stop(ac.currentTime + at + len);
+      });
+  } catch { /* 소리를 낼 수 없는 환경이면 꽃가루만 */ }
 }
 
 async function start(id) {

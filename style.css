@@ -457,6 +457,22 @@ details[open] summary::before { content: "▼ "; }
   background: var(--panel); border: 3px solid var(--ink); padding: 6px 14px;
 }
 
+/* ── 출근 완료 — 레벨업 창 모양에 회사 건물 · 꽃가루를 더한다 ── */
+.arrive { z-index: 31; overflow: hidden; }
+.arrive .lu-big { font-family: var(--pixel); font-weight: 700; font-size: 40px; line-height: 1.2; }
+.arrive .lu-sub { margin-bottom: 16px; }
+.arrive-office { display: block; width: 66px; height: 66px; margin: 0 auto; }
+.confetti { position: absolute; inset: 0; z-index: 2; pointer-events: none; }        /* 창 앞으로 쏟아지게 */
+.confetti i {
+  position: absolute; top: -12px; width: 8px; height: 8px; box-shadow: 2px 2px 0 rgba(0, 0, 0, .25);
+  animation-name: confetti; animation-timing-function: steps(24); animation-fill-mode: both;
+  animation-iteration-count: 2;
+}
+.confetti i:nth-child(3n) { width: 6px; height: 12px; }
+@keyframes confetti {
+  to { transform: translateY(105vh) rotate(540deg); }
+}
+
 @media (min-width: 420px) { .grid { gap: 12px; } }
 
 @media (prefers-reduced-motion: reduce) {
