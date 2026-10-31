@@ -712,15 +712,6 @@ def one_line(s):
     return " ".join(s.split())
 
 
-def by_sentence(s):
-    """의미 단위 경계(\\n)를 문장이 끝나는 곳과 «~지만, ~고, ~어도, ~는데, ~것으로,» 같은 이음 뒤에 넣는다.
-
-    화면은 \\n 에서 줄을 강제로 바꾸지 않고, 한 줄에 들어가는 만큼 단위를 붙이다가 넘칠 때만
-    단위 사이에서 넘긴다(app.js units). 문항 문장(text)의 \\n 도 같은 뜻이다.
-    """
-    return re.sub(r"(다\.|지만,|[고어져데도],|것으로,|므로\([^)]*\),) ", r"\1\n", s)
-
-
 def write_labor():
     """노동법 · 보험 주제만 쓰고, topics.json 목록을 이 주제들로 바꾼다.
 
@@ -730,12 +721,6 @@ def write_labor():
     OUT.mkdir(parents=True, exist_ok=True)
     for t in TOPICS:
         assert len(t["questions"]) == 5, f"{t['id']}: 문항이 5개가 아닙니다"
-        t["caveat"] = by_sentence(t["caveat"])
-        for q in t["questions"]:
-            q["why"] = by_sentence(q["why"])
-            if q.get("limit"):
-                q["limit"] = by_sentence(q["limit"])
-            q["basis"] = q["basis"].replace(" «", "\n«", 1)   # 어디서 / 무엇을 뽑았나
         pack = {k: t[k] for k in ("id", "emoji", "title", "blurb",
                                   "source", "source_url", "caveat")}
         pack["questions"] = t["questions"]

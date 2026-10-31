@@ -127,8 +127,9 @@ function directionOf(q, mine) {
 /* 제목의 줄바꿈(\n)은 스테이지 카드에서만 쓴다. 공유 문구 · 촌평 요청에는 한 줄로 */
 const oneLine = (s) => s.replace(/\s*\n\s*/g, " ");
 
-/* 문항 · 해설 · 근거 · 한계의 \n 은 의미 단위 경계다. 단위마다 줄 안에서 쪼개지지 않는 덩어리로 감싸,
-   한 줄에 들어가는 만큼 붙이고 넘칠 때만 단위 사이에서 줄을 넘긴다 */
+/* 문항 문장(text)의 \n 은 의미 단위 경계다. 단위마다 줄 안에서 쪼개지지 않는 덩어리로 감싸,
+   한 줄에 들어가는 만큼 붙이고 넘칠 때만 단위 사이에서 줄을 넘긴다.
+   해설 · 근거 · 한계처럼 긴 글은 단위로 묶지 않고 낱말 사이(keep-all)에서 넘겨 줄 끝까지 채운다 */
 const units = (s) => s.split("\n").map((u) => `<span class="unit">${u}</span>`).join(" ");
 
 function show(name) {
@@ -308,14 +309,14 @@ function renderResult() {
       <h3><span class="qmark">${heartSvg(isHit(q, mine))}</span><span>${units(q.text)}</span></h3>
       <p class="react ${hit ? "hit" : pct > 40 ? "miss" : ""}">${reactionOf(q, mine, pct)}</p>
       ${q.type === "choice" ? choiceBody(q, mine) : sliderBody(q, mine)}
-      <p class="why">${units("💡 " + q.why)}</p>
-      <details><summary>근거 보기</summary><p class="basis">${units(q.basis)}</p>${
-        q.limit ? `<p class="basis">${units("⚠️ 한계 · " + q.limit)}</p>` : ""}</details>`;
+      <p class="why">💡 ${q.why}</p>
+      <details><summary>근거 보기</summary><p class="basis">${q.basis}</p>${
+        q.limit ? `<p class="basis">⚠️ 한계 · ${q.limit}</p>` : ""}</details>`;
     box.appendChild(el);
   });
 
   $("caveat").hidden = !PACK.caveat;
-  if (PACK.caveat) $("caveat").innerHTML = `<b>이 데이터의 한계</b><br>${units(PACK.caveat)}`;
+  if (PACK.caveat) $("caveat").innerHTML = `<b>이 데이터의 한계</b><br>${PACK.caveat}`;
   $("source").innerHTML =
     `출처 <a href="${PACK.source_url}" target="_blank" rel="noopener">${PACK.source}</a>`;
 
