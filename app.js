@@ -145,12 +145,6 @@ function reactionOf(q, mine, pct) {
   }
   return (INDEX.reactions.find((r) => pct <= r.max) || { text: "" }).text;
 }
-/* 받침이 있으면 을, 없으면 를 */
-function josa(w) {
-  const c = String(w).trim().slice(-1).charCodeAt(0);
-  if (c < 0xac00 || c > 0xd7a3) return "을";
-  return (c - 0xac00) % 28 ? "을" : "를";
-}
 /* 제목의 줄바꿈(\n)은 스테이지 카드에서만 쓴다. 공유 문구에는 한 줄로 */
 const oneLine = (s) => s.replace(/\s*\n\s*/g, " ");
 
@@ -181,7 +175,7 @@ async function boot() {
     const t = INDEX.topics.find((x) => x.id === p.get("t"));
     $("shared-banner").innerHTML =
       `친구가 ${t ? `<b>${t.emoji} ${t.title}</b> 에서 ` : ""}` +
-      `<b>${Number(p.get("s"))}점 · ${g}</b>${josa(g || "점")} 받았습니다.` +
+      `<b>${Number(p.get("s"))}점</b>` + (g ? `, <b>${g}</b> 등급을` : "을") + ` 받았습니다.` +
       (p.has("r") ? ` 지금 직급은 <b>${p.get("r")}</b>, ` +
         (Number(p.get("st")) ? `회사까지 <b>${Number(p.get("st"))}정거장</b> 남았어요.` : `<b>출근 완료!</b>`) : "") +
       ` 당신은요?`;
