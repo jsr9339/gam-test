@@ -458,6 +458,7 @@ details[open] summary::before { content: "▼ "; }
 }
 
 /* ── 출근 완료 — 레벨업 창 모양에 회사 건물 · 꽃가루를 더한다 ── */
+#levelup { overflow: hidden; }                        /* 대표이사 취임 꽃가루가 화면 밖으로 넘치지 않게 */
 .arrive { z-index: 31; overflow: hidden; }
 .arrive .lu-big { font-family: var(--pixel); font-weight: 700; font-size: 40px; line-height: 1.2; }
 .arrive .lu-sub { margin-bottom: 16px; }

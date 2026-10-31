@@ -82,7 +82,9 @@ function showLevelup(from, to) {
   $("lu-lv").textContent = `LV ${from} ▶ LV ${to}`;
   $("lu-title").textContent = RANKS[to - 1];
   $("lu-ok").textContent = top ? "대표이사로 취임하기 ▶" : "다음 승진 도전 ▶";
+  $("lu-confetti").innerHTML = "";
   $("levelup").hidden = false;
+  if (top) { confetti($("lu-confetti")); fanfare(); }   // 대표이사 취임은 출근 완료처럼 꽃가루 · 빵빠레
 }
 function renderStageHearts() {
   $("stage-hearts").innerHTML = PACK.questions
@@ -246,13 +248,18 @@ function renderCommute() {
   try { localStorage.setItem(COMMUTE_KEY, String(got)); } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ }
 }
 
-/* 출근 완료 축하 — 픽셀 꽃가루 + 8비트 빵빠레 */
-function celebrate() {
+/* 픽셀 꽃가루 — 출근 완료 · 대표이사 취임 창이 같이 쓴다 */
+function confetti(box) {
   const colors = ["#e8352e", "#f9e04b", "#7fd05a", "#3d6fb0", "#ffffff", "#e8972e"];
-  $("confetti").innerHTML = Array.from({ length: 48 }, (_, i) =>
+  box.innerHTML = Array.from({ length: 48 }, (_, i) =>
     `<i style="left:${Math.random() * 100}%;background:${colors[i % colors.length]};` +
     `animation-delay:${(Math.random() * 1.2).toFixed(2)}s;animation-duration:${(2.2 + Math.random() * 1.6).toFixed(2)}s"></i>`
   ).join("");
+}
+
+/* 출근 완료 축하 — 픽셀 꽃가루 + 8비트 빵빠레 */
+function celebrate() {
+  confetti($("confetti"));
   $("arrive").hidden = false;
   fanfare();
 }
