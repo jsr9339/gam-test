@@ -270,7 +270,7 @@ def build_labor():
     r_pay = pick(RET, "제9조", r"(\d+)일 이내에 퇴직금", 1)
     r_exp = pick(RET, "제10조", r"(\d+)년간 행사하지")
     law_topic(
-        "labor-retire", "💼", "퇴직과 퇴직금 제대로 알기",
+        "labor-retire", "💼", "퇴직과 퇴직금\n제대로 알기",
         "누가, 얼마를, 언제까지 받나", [RET], [
             slider("rt1", "퇴직금을 받으려면 최소 몇 년을 일해야 할까요?",
                    r_year, "년", 0, 5, 1,
@@ -310,7 +310,7 @@ def build_labor():
     h_teen = pick(KLS, "제69조", r"1주에 (\d+)시간을 초과하지")
     NIGHT = ["오후 8시", "오후 9시", "오후 10시", "자정"]
     law_topic(
-        "labor-hours", "⏱️", "근로시간과 휴게시간의 비밀",
+        "labor-hours", "⏱️", "근로시간과\n휴게시간의 비밀",
         "주 몇 시간, 쉬는 시간은 얼마나", [KLS], [
             slider("hr1", "법정 근로시간은 1주 몇 시간일까요?",
                    h_week, "시간", 0, 70, 1,
@@ -347,7 +347,7 @@ def build_labor():
     w_exp = pick(KLS, "제49조", r"(\d+)년간 행사하지")
     mw27, mw26 = min_wage(27), min_wage(26)
     law_topic(
-        "labor-wage", "💰", "임금과 수당, 제대로 알고 받기",
+        "labor-wage", "💰", "임금과 수당\n제대로 알고 받기",
         "더 받는 시간, 쉬어도 받는 돈", [KLS, MW], [
             slider("wg1", "연장근로를 하면 통상임금에 몇 %를 더 받을까요?",
                    w_ot, "%", 0, 200, 5,
@@ -446,7 +446,7 @@ def build_labor():
     f_leave = pick(GEN, "제19조", r"육아휴직의 기간은 (\d+)년 이내", 2)
     f_age = pick(GEN, "제19조의2", r"만 (\d+)세 이하", 1)
     law_topic(
-        "labor-family", "👶", "출산·육아와 일·가정 양립 제도",
+        "labor-family", "👶", "출산·육아와\n일·가정 양립 제도",
         "출산휴가, 배우자 휴가, 육아휴직", [GEN, KLS], [
             slider("fm1", "출산전후휴가는 며칠일까요? (아이 한 명)",
                    f_birth, "일", 0, 180, 5,
@@ -641,7 +641,7 @@ def build_labor():
     p_early = pick(NP, "제63조", r"55세부터 지급받는 경우에는 1천분의 (\d+)", 2)
     p_10y = pick(NP, "제63조", r"기본연금액의 1천분의 (\d+)에 해당하는 금액에 가입기간", 1)
     law_topic(
-        "ins-pension", "👵", "국민연금, 언제 얼마나 받나",
+        "ins-pension", "👵", "국민연금\n언제 얼마나 받나",
         "가입 나이, 최소 가입기간, 앞당기기와 미루기", [NP], [
             slider("pn1", "국민연금 가입 대상은 몇 세 이상부터일까요?",
                    p_from, "세", 0, 30, 1,
@@ -681,7 +681,7 @@ def build_labor():
     n_next = has(NHI, "제69조", "자격을 취득한 날이 속하는 달의 다음 달부터", 2)
     WHEN = ["입사한 달부터", "다음 달부터", "3개월 뒤부터", "1년 뒤부터"]
     law_topic(
-        "ins-health", "🏥", "건강보험료, 누가 얼마나 내나",
+        "ins-health", "🏥", "건강보험료\n누가 얼마나 내나",
         "보험료율 상한, 회사와 나누는 비율", [NHI], [
             slider("nh1", "직장인 건강보험료율은 법으로 최대 몇 %까지 정할 수 있을까요?",
                    n_cap / 10, "%", 0, 20, 0.5,
@@ -733,7 +733,8 @@ def write_labor():
           f"{sum(len(t['questions']) for t in TOPICS)}문항", "",
           "> 모든 값은 `data/raw/` 의 법령 원문에서 `tools/build_topics.py` 가 뽑습니다.", ""]
     for t in TOPICS:
-        md += [f"## {t['emoji']} {t['title']}", "", f"- 출처: {t['source']}", ""]
+        title = " ".join(t["title"].split())       # 카드용 줄바꿈은 정답지에서 한 줄로
+        md += [f"## {t['emoji']} {title}", "", f"- 출처: {t['source']}", ""]
         for q in t["questions"]:
             a = f"{q['answer']:g}{q['unit']}" if q["type"] == "slider" else q["answer"]
             md += [f"**{q['text']}**", "", f"- 정답 **{a}**", f"- 근거 {q['basis']}", ""]
@@ -741,7 +742,7 @@ def write_labor():
 
     print(f"주제 {len(TOPICS)}개 · 문항 {sum(len(t['questions']) for t in TOPICS)}개")
     for t in TOPICS:
-        print(f"\n{t['emoji']} {t['title']}")
+        print(f"\n{t['emoji']} {' '.join(t['title'].split())}")
         for q in t["questions"]:
             a = f"{q['answer']:g}{q['unit']}" if q["type"] == "slider" else q["answer"]
             print(f"    [{q['type'][:6]:<6}] {q['text'][:44]:<44} → {a}")

@@ -169,7 +169,7 @@ svg.hp.off { opacity: .55; }
 .tcard.done { background: #fffbd0; }
 .tstage { font-family: var(--arcade); font-size: 8px; color: var(--muted); }
 .temoji { font-size: 24px; line-height: 1.1; }
-.ttitle { font-size: 14px; font-weight: 700; line-height: 1.4; }
+.ttitle { font-size: 14px; font-weight: 700; line-height: 1.4; white-space: pre-line; }
 .tblurb { font-size: 11.5px; color: var(--muted); line-height: 1.45; }
 .thearts { display: flex; gap: 2px; margin-top: auto; padding-top: 4px; }
 .thearts svg.hp { width: 15px; height: 14px; }

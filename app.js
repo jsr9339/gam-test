@@ -124,6 +124,9 @@ function directionOf(q, mine) {
   return d > 0 ? "높게" : "낮게";
 }
 
+/* 제목의 줄바꿈(\n)은 스테이지 카드에서만 쓴다. 공유 문구 · 촌평 요청에는 한 줄로 */
+const oneLine = (s) => s.replace(/\s*\n\s*/g, " ");
+
 function show(name) {
   Object.entries(views).forEach(([k, el]) => (el.hidden = k !== name));
   window.scrollTo({ top: 0 });
@@ -363,7 +366,7 @@ async function askComment(total, grade) {
     const r = await fetch("/api/comment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ score: total, grade, directions, topic: PACK.title }),
+      body: JSON.stringify({ score: total, grade, directions, topic: oneLine(PACK.title) }),
       signal: ctl.signal,
     });
     clearTimeout(timer);
@@ -382,7 +385,7 @@ async function share() {
   const grade = $("grade").textContent;
   const url = `${location.origin}${location.pathname}` +
     `?t=${encodeURIComponent(PACK.id)}&s=${total}&g=${encodeURIComponent(grade)}`;
-  const text = `${INDEX.title} · ${PACK.title} ${total}점 · ${grade}`;
+  const text = `${INDEX.title} · ${oneLine(PACK.title)} ${total}점 · ${grade}`;
   try {
     if (navigator.share) { await navigator.share({ title: INDEX.title, text, url }); return; }
     await navigator.clipboard.writeText(`${text}\n${url}`);
