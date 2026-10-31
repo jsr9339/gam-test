@@ -5,41 +5,102 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>굿모닝 노동법! — 출근길에 알아보는 슬기로운 직장생활</title>
 <meta name="description" content="출근길에 알아보는 슬기로운 직장생활. 노동법 · 4대 보험 13개 주제, 주제당 5문항.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@2.39.3/dist/galmuri.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<!-- 픽셀 그림 — 하트 · 빈 하트 · 동전 · 구름 · 나무. 1칸 = 1px, 확대해도 각지게 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="px-heart" viewBox="0 0 9 8" shape-rendering="crispEdges">
+      <path fill="#2b1a14" d="M1 0h2v1H1zM6 0h2v1H6zM0 1h1v3H0zM3 1h3v1H3zM8 1h1v3H8zM1 4h1v1H1zM7 4h1v1H7zM2 5h1v1H2zM6 5h1v1H6zM3 6h1v1H3zM5 6h1v1H5zM4 7h1v1H4z"/>
+      <path fill="#e8352e" d="M1 1h2v1H1zM6 1h2v1H6zM1 2h7v2H1zM2 4h5v1H2zM3 5h3v1H3zM4 6h1v1H4z"/>
+      <path fill="#ffd23f" d="M2 1h1v1H2zM1 2h1v1H1z"/>
+    </symbol>
+    <symbol id="px-heart-empty" viewBox="0 0 9 8" shape-rendering="crispEdges">
+      <path fill="#2b1a14" d="M1 0h2v1H1zM6 0h2v1H6zM0 1h1v3H0zM3 1h3v1H3zM8 1h1v3H8zM1 4h1v1H1zM7 4h1v1H7zM2 5h1v1H2zM6 5h1v1H6zM3 6h1v1H3zM5 6h1v1H5zM4 7h1v1H4z"/>
+      <path fill="#6b3b2a" d="M1 1h2v1H1zM6 1h2v1H6zM1 2h7v2H1zM2 4h5v1H2zM3 5h3v1H3zM4 6h1v1H4z"/>
+    </symbol>
+    <symbol id="px-coin" viewBox="0 0 8 8" shape-rendering="crispEdges">
+      <path fill="#6b3b1a" d="M2 0h4v1H2zM1 1h1v1H1zM6 1h1v1H6zM0 2h1v4H0zM7 2h1v4H7zM1 6h1v1H1zM6 6h1v1H6zM2 7h4v1H2z"/>
+      <path fill="#f2a52b" d="M2 1h4v1H2zM1 2h6v4H1zM2 6h4v1H2z"/>
+      <path fill="#ffd95a" d="M2 2h3v1H2zM2 3h1v2H2zM4 3h1v2H4z"/>
+    </symbol>
+    <symbol id="px-cloud" viewBox="0 0 16 7" shape-rendering="crispEdges">
+      <path fill="#d9f6ff" d="M5 0h4v1H5zM3 1h8v1H3zM2 2h11v1H2zM1 3h14v2H1zM0 5h16v2H0z"/>
+      <path fill="#fff" d="M5 1h3v1H5zM3 2h6v1H3zM2 3h9v2H2zM1 5h12v1H1z"/>
+    </symbol>
+    <symbol id="px-tree" viewBox="0 0 12 14" shape-rendering="crispEdges">
+      <path fill="#2f6b1f" d="M3 0h6v1H3zM1 1h10v1H1zM0 2h12v6H0zM1 8h10v1H1zM3 9h6v1H3z"/>
+      <path fill="#5aae2e" d="M3 1h5v1H3zM1 2h9v5H1zM2 7h7v1H2z"/>
+      <path fill="#8fd14f" d="M3 2h3v1H3zM2 3h2v2H2z"/>
+      <path fill="#7a4a2a" d="M5 9h2v5H5z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="sky" aria-hidden="true">
+  <svg class="cloud c1"><use href="#px-cloud"/></svg>
+  <svg class="cloud c2"><use href="#px-cloud"/></svg>
+  <svg class="cloud c3"><use href="#px-cloud"/></svg>
+</div>
+
 <main id="app">
+
+  <!-- 레벨 · 하트 — 모든 화면 맨 위 -->
+  <header id="hud" class="hud">
+    <span id="hud-lv" class="hud-lv">LV 1</span>
+    <span class="hud-mid">
+      <span id="hud-title" class="hud-title">인턴</span>
+      <span class="xp"><i id="hud-xp"></i></span>
+    </span>
+    <span class="hud-hearts"><svg><use href="#px-heart"/></svg><b id="hud-total">0</b></span>
+  </header>
 
   <!-- 주제 고르기 ──────────────────────────────── -->
   <section id="view-home" class="view">
     <p id="shared-banner" class="banner" hidden></p>
     <div class="hero">
-      <div class="badge-day">공개 데이터</div>
+      <svg class="tree t-left" aria-hidden="true"><use href="#px-tree"/></svg>
+      <svg class="tree t-right" aria-hidden="true"><use href="#px-tree"/></svg>
+      <div class="badge-day">PRESS START</div>
       <h1 id="title">굿모닝 노동법!</h1>
       <p id="subtitle" class="muted"></p>
-      <p class="lead">주제를 하나 고르세요. 5문항, 1분이면 끝납니다.</p>
+      <p class="lead">
+        <svg class="coin" aria-hidden="true"><use href="#px-coin"/></svg>
+        스테이지를 골라 5문제를 풀고 하트를 모으세요.
+        <svg class="coin" aria-hidden="true"><use href="#px-coin"/></svg>
+      </p>
     </div>
     <p id="progress-note" class="fineprint" style="text-align:left"></p>
     <div id="topic-grid" class="grid"></div>
-    <p class="fineprint">모든 숫자는 공개 데이터에서 직접 계산했습니다.
-      정답 옆의 <b>근거 보기</b>를 누르면 어떻게 셌는지 나옵니다.</p>
+    <p class="fineprint">모든 정답은 법령 원문에서 직접 뽑았습니다.
+      결과 화면의 <b>근거 보기</b>를 누르면 어디서 뽑았는지 나옵니다.</p>
   </section>
 
   <!-- 문항 ───────────────────────────────────── -->
   <section id="view-quiz" class="view" hidden>
-    <button id="btn-back" class="linkish">← 주제 고르기</button>
+    <button id="btn-back" class="linkish">◀ 스테이지 고르기</button>
     <p id="topic-name" class="muted small"></p>
+    <div class="stage-bar">
+      <p id="q-count" class="muted small"></p>
+      <div id="stage-hearts" class="stage-hearts" aria-label="이번 스테이지에서 얻은 하트"></div>
+    </div>
     <div class="progress"><div id="progress-bar"></div></div>
-    <p id="q-count" class="muted small"></p>
-    <h2 id="q-text"></h2>
+    <div class="qbox">
+      <h2 id="q-text"></h2>
 
-    <div id="q-choice" class="choices" hidden></div>
+      <div id="q-choice" class="choices" hidden></div>
 
-    <div id="q-slider" hidden>
-      <output id="slider-out" class="slider-out"></output>
-      <input type="range" id="slider" aria-label="추측 값">
-      <div class="slider-ends"><span id="slider-min"></span><span id="slider-max"></span></div>
+      <div id="q-slider" hidden>
+        <output id="slider-out" class="slider-out"></output>
+        <input type="range" id="slider" aria-label="추측 값">
+        <div class="slider-ends"><span id="slider-min"></span><span id="slider-max"></span></div>
+      </div>
     </div>
 
     <button id="btn-next" class="primary" disabled>다음</button>
@@ -49,9 +110,11 @@
   <section id="view-result" class="view" hidden>
     <p id="result-topic" class="muted small"></p>
     <div class="score-card">
+      <div class="stage-clear">STAGE CLEAR</div>
       <div id="grade-emoji" class="grade-emoji"></div>
       <div id="score" class="score"></div>
       <div id="grade" class="grade"></div>
+      <div id="heart-gain" class="heart-gain"></div>
     </div>
 
     <div id="ai-comment" class="ai" hidden></div>
@@ -63,11 +126,26 @@
 
     <div class="actions">
       <button id="btn-share" class="primary">친구에게 보내기</button>
-      <button id="btn-more" class="ghost">다른 주제 풀기</button>
+      <button id="btn-more" class="ghost">다른 스테이지 풀기</button>
     </div>
   </section>
 
 </main>
+
+<div id="toast" class="toast" hidden aria-live="polite"></div>
+
+<!-- 레벨업 -->
+<div id="levelup" class="levelup" hidden role="dialog" aria-label="레벨 업">
+  <div class="lu-box">
+    <div class="lu-sub">축하합니다! 승진했어요</div>
+    <div class="lu-big">LEVEL<br>UP!</div>
+    <div id="lu-lv" class="lu-lv"></div>
+    <div id="lu-title" class="lu-title"></div>
+    <button id="lu-ok" class="primary">계속하기</button>
+  </div>
+</div>
+
+<div class="ground" aria-hidden="true"></div>
 
 <script src="app.js"></script>
 </body>

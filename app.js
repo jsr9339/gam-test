@@ -1,4 +1,4 @@
-/* 감 테스트 — 주제 고르기 · 진행 · 채점 · 결과 · 공유
+/* 굿모닝 노동법! — 주제 고르기 · 진행 · 채점 · 하트 · 레벨 · 결과 · 공유
  *
  * 계산은 전부 여기서 끝난다. 서버는 촌평 한 줄을 받을 때만 부른다.
  * 원본 데이터는 이 앱에 들어오지 않는다 — topics/*.json 에 정답과 근거만 있다.
@@ -26,6 +26,64 @@ function markDone(id, score) {
     m[id] = Math.max(score, m[id] ?? 0);
     localStorage.setItem(DONE_KEY, JSON.stringify(m));
   } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ }
+}
+
+/* ── 하트 · 레벨 ─────────────────────────────────────
+ * 한 문항에 하트 1개 — 택1은 맞히면, 슬라이더는 오차 20% 안이면.
+ * 주제마다 «가장 많이 받은 하트»만 남기고, 그 합으로 레벨을 정한다.
+ * 같은 주제를 다시 풀어 하트를 불릴 수는 없다.
+ */
+const HEART_KEY = "gam-test-hearts";
+const HEART_PCT = 20;
+const PER_LEVEL = 5;
+const RANKS = ["인턴", "수습사원", "사원", "주임", "대리", "과장", "차장",
+               "부장", "이사", "상무", "전무", "부사장", "사장", "노동법 마스터"];
+let stageHits = [];
+
+function heartMap() {
+  try { return JSON.parse(localStorage.getItem(HEART_KEY) || "{}"); }
+  catch { return {}; }
+}
+function saveHearts(id, n) {
+  try {
+    const m = heartMap();
+    m[id] = Math.max(n, m[id] ?? 0);
+    localStorage.setItem(HEART_KEY, JSON.stringify(m));
+  } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ }
+}
+function totalHearts(m = heartMap()) {
+  return Object.values(m).reduce((a, b) => a + b, 0);
+}
+function levelOf(total) {
+  const lv = Math.min(RANKS.length, Math.floor(total / PER_LEVEL) + 1);
+  const into = lv === RANKS.length ? PER_LEVEL : total - (lv - 1) * PER_LEVEL;
+  return { lv, rank: RANKS[lv - 1], pct: into / PER_LEVEL * 100 };
+}
+function isHit(q, mine) {
+  return q.type === "choice" ? mine === q.answer : errPct(q, mine) <= HEART_PCT;
+}
+const heartSvg = (full) =>
+  `<svg class="hp${full ? "" : " off"}"><use href="#px-heart${full ? "" : "-empty"}"/></svg>`;
+
+function renderHud() {
+  const total = totalHearts();
+  const L = levelOf(total);
+  $("hud-lv").textContent = `LV ${L.lv}`;
+  $("hud-title").textContent = L.rank;
+  $("hud-xp").style.width = `${L.pct}%`;
+  $("hud-total").textContent = total;
+}
+function renderStageHearts() {
+  $("stage-hearts").innerHTML = PACK.questions
+    .map((_, i) => heartSvg(stageHits[i] === true)).join("");
+}
+function toast(hit) {
+  const t = $("toast");
+  t.className = "toast " + (hit ? "good" : "bad");
+  t.innerHTML = hit ? `${heartSvg(true)} +1` : "MISS";
+  t.hidden = false;
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => (t.hidden = true), 750);
 }
 
 /* ── 채점 ────────────────────────────────────────────
@@ -87,7 +145,9 @@ async function boot() {
     $("shared-banner").hidden = false;
   }
 
+  renderHud();
   renderGrid();
+  $("lu-ok").onclick = () => ($("levelup").hidden = true);
   $("btn-next").onclick = next;
   $("btn-back").onclick = () => show("home");
   $("btn-more").onclick = () => { renderGrid(); show("home"); };
@@ -100,18 +160,24 @@ async function boot() {
 
 function renderGrid() {
   const done = doneMap();
+  const hearts = heartMap();
   const n = INDEX.topics.filter((t) => t.id in done).length;
   $("progress-note").textContent =
-    n ? `${INDEX.topics.length}개 중 ${n}개 풀었습니다` : "";
+    n ? `${INDEX.topics.length}개 스테이지 중 ${n}개 클리어` : "";
   $("topic-grid").innerHTML = "";
-  INDEX.topics.forEach((t) => {
+  INDEX.topics.forEach((t, i) => {
     const b = document.createElement("button");
     b.className = "tcard" + (t.id in done ? " done" : "");
     b.innerHTML =
+      `<span class="tstage">STAGE ${i + 1}</span>` +
       `<span class="temoji">${t.emoji}</span>` +
       `<span class="ttitle">${t.title}</span>` +
       `<span class="tblurb">${t.blurb}</span>` +
-      (t.id in done ? `<span class="tscore">${done[t.id]}점</span>` : "");
+      (t.id in done
+        ? `<span class="thearts">${[0, 1, 2, 3, 4]
+            .map((k) => heartSvg(k < (hearts[t.id] ?? 0))).join("")}</span>` +
+          `<span class="tscore">${done[t.id]}점</span>`
+        : "");
     b.onclick = () => start(t.id);
     $("topic-grid").appendChild(b);
   });
@@ -119,8 +185,9 @@ function renderGrid() {
 
 async function start(id) {
   PACK = await (await fetch(`topics/${id}.json`)).json();
-  idx = 0; answers = [];
+  idx = 0; answers = []; stageHits = [];
   $("topic-name").textContent = `${PACK.emoji} ${PACK.title}`;
+  renderStageHearts();
   renderQ();
   show("quiz");
 }
@@ -174,6 +241,10 @@ function renderQ() {
 }
 
 function next() {
+  // 답을 넘길 때마다 하트를 얻었는지만 알려 준다. 정답 숫자는 결과 화면에서
+  stageHits[idx] = isHit(PACK.questions[idx], answers[idx]);
+  renderStageHearts();
+  toast(stageHits[idx]);
   if (idx < PACK.questions.length - 1) { idx++; renderQ(); return; }
   renderResult();
   show("result");
@@ -191,10 +262,31 @@ function renderResult() {
   const g = gradeOf(total);
   markDone(PACK.id, total);
 
+  const got = PACK.questions.filter((q, i) => isHit(q, answers[i])).length;
+  const before = levelOf(totalHearts());
+  const best = heartMap()[PACK.id] ?? 0;
+  saveHearts(PACK.id, got);
+  const after = levelOf(totalHearts());
+  renderHud();
+
   $("result-topic").textContent = `${PACK.emoji} ${PACK.title}`;
   $("score").innerHTML = `${total}<span>점</span>`;
   $("grade").textContent = g.name;
   $("grade-emoji").textContent = g.emoji || "";
+  $("heart-gain").innerHTML =
+    `<span class="hg-row">${PACK.questions.map((q, i) =>
+      `<span class="pop" style="animation-delay:${i * 0.18}s">${heartSvg(isHit(q, answers[i]))}</span>`
+    ).join("")}</span>` +
+    `<span class="hg-text">하트 ${got}개 획득` +
+    (got > best ? (best ? ` · 최고 기록 갱신 (+${got - best})` : "") : best ? ` · 최고 기록 ${best}개` : "") +
+    `</span>`;
+  if (after.lv > before.lv) {
+    setTimeout(() => {
+      $("lu-lv").textContent = `LV ${before.lv} ▶ LV ${after.lv}`;
+      $("lu-title").textContent = after.rank;
+      $("levelup").hidden = false;
+    }, PACK.questions.length * 180 + 500);
+  }
 
   const box = $("cards");
   box.innerHTML = "";
@@ -205,7 +297,7 @@ function renderResult() {
     const el = document.createElement("div");
     el.className = "card";
     el.innerHTML = `
-      <h3>${q.text}</h3>
+      <h3><span class="qmark">${heartSvg(isHit(q, mine))}</span>${q.text}</h3>
       <p class="react ${hit ? "hit" : pct > 40 ? "miss" : ""}">${reactionOf(q, mine, pct)}</p>
       ${q.type === "choice" ? choiceBody(q, mine) : sliderBody(q, mine)}
       <p class="why">💡 ${q.why}</p>
