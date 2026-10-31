@@ -186,8 +186,8 @@ svg.hp.off { opacity: .55; }
 }
 .lead-heart { width: 18px; height: 16px; flex: none; animation: spin 1s steps(4) infinite; }   /* 빙글 도는 하트 */
 @keyframes spin { 50% { transform: scaleX(.3) } }
-/* 굿모닝 해 — 가로세로 햇살과 대각선 햇살이 번갈아 켜져 반짝이고, 해는 살짝 들썩인다 */
-.sun { position: absolute; top: 6px; width: 46px; height: 46px; animation: bob 2s steps(2) infinite; }
+/* 굿모닝 해 — 날개 6개짜리 햇살 두 벌이 번갈아 켜져 반짝이고, 해는 살짝 들썩인다 */
+.sun { position: absolute; top: 4px; width: 50px; height: 50px; animation: bob 2s steps(2) infinite; }
 .sun.s-left { left: 6px; }
 .sun.s-right { right: 6px; }
 .sun .ray-a { animation: ray-on .9s steps(1) infinite; }
