@@ -88,7 +88,7 @@ body { display: flex; flex-direction: column; overflow-x: hidden; }
 .worker.w2 { left: 18%; animation: board-a 18s linear infinite, bob 1.4s steps(1) infinite .3s; }
 .worker.w3 { left: 88%; animation: walk-back 13s linear infinite alternate, bob .6s steps(1) infinite .2s; }
 .worker.w4 { left: 36%; animation: board-b 18s linear infinite, bob 1.8s steps(1) infinite; }
-/* 버스 문은 27% 자리. 28% 에 버스가 서고 50% 에 떠난다 — 그 사이에 걸어가 타고(사라지고), 버스가 떠난 뒤 다음 사람이 나타난다 */
+/* 버스 문은 27% 자리. 28% 에 버스가 서고 56% 에 떠난다 — 그 사이에 걸어가 타고(사라지고), 버스가 떠난 뒤 다음 사람이 나타난다 */
 @keyframes board-a {
   0%, 30% { left: 18%; opacity: 1; }
   38% { left: 25%; opacity: 1; }
@@ -112,8 +112,8 @@ body { display: flex; flex-direction: column; overflow-x: hidden; }
 @keyframes bus-run {
   0%   { left: calc(50% - 50vw - 110px); animation-timing-function: ease-out; }
   28%  { left: calc(27% - 77px); }
-  50%  { left: calc(27% - 77px); animation-timing-function: ease-in; }
-  78%, 100% { left: calc(50% + 50vw + 20px); }
+  56%  { left: calc(27% - 77px); animation-timing-function: ease-in; }   /* 두 사람이 다 타고(43%) «출발~!» 뒤에 떠난다 */
+  82%, 100% { left: calc(50% + 50vw + 20px); }
 }
 @keyframes rumble { 50% { transform: translateY(-1px); } }
 
@@ -134,18 +134,19 @@ body { display: flex; flex-direction: column; overflow-x: hidden; }
   display: grid; place-items: center; box-shadow: inset 0 -3px 0 #8fd0e6;
 }
 .porthole svg { width: 26px; height: 26px; margin-top: 1px; }   /* 귀까지 원 안에 다 보이게 */
-/* «출발~!» — 버스가 정류장에 서 있는 동안(28~50%)만 기사석 위에 뜬다 */
+/* «출발~!» — 두 사람이 다 탄 뒤 버스가 움직이기 직전까지만 기사석 위에 크게 뜬다 */
 .depart {
-  position: absolute; left: 50px; top: -33px; padding: 2px 5px; white-space: nowrap;
-  font-size: 10px; font-weight: 800; line-height: 1.2; color: var(--ink);
-  background: #fff; border: 2px solid var(--ink);
+  position: absolute; left: 40px; top: -48px; padding: 3px 9px; white-space: nowrap;
+  font-size: 14px; font-weight: 800; line-height: 1.25; color: var(--ink);
+  background: #fff; border: 3px solid var(--ink); box-shadow: 2px 2px 0 var(--ink);
   opacity: 0; animation: depart 18s steps(1) infinite;
 }
 .depart::after {
-  content: ""; position: absolute; left: 14px; bottom: -5px; width: 6px; height: 6px; background: #fff;
-  border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: rotate(45deg);
+  content: ""; position: absolute; left: 24px; bottom: -7px; width: 8px; height: 8px; background: #fff;
+  border-right: 3px solid var(--ink); border-bottom: 3px solid var(--ink); transform: rotate(45deg);
 }
-@keyframes depart { 0%, 29% { opacity: 0; } 30%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+/* 두 사람이 다 탄 뒤(44%)부터 버스가 움직이기 직전(56%)까지만 */
+@keyframes depart { 0%, 43% { opacity: 0; } 44%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   .cloud, .worker, .bus, .bus-riders, .seat { animation: none; }   /* 버스는 정류장 앞에 서 있고, 사람들은 기다린다 */
