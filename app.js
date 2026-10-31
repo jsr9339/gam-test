@@ -171,6 +171,8 @@ async function boot() {
     const t = INDEX.topics.find((x) => x.id === p.get("t"));
     if (t && !p.has("s")) start(t.id);
   }
+  // ?celebrate — 12개를 다 풀지 않아도 출근 완료 축하를 미리 본다(진행 기록은 그대로)
+  if (p.has("celebrate")) setTimeout(celebrate, 600);
 }
 
 function renderGrid() {
