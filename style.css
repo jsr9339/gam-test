@@ -361,8 +361,9 @@ details[open] summary::before { content: "▼ "; }
 .caveat b { font-family: var(--pixel); color: var(--red); }
 #source a { color: var(--ink); }
 
-/* 문항 · 해설 · 근거 · 한계의 줄바꿈(\n)은 의미 단위로 넣은 것이라 그대로 살린다 */
-#q-text, .card h3, .why, .basis, .caveat { white-space: pre-line; }
+/* 의미 단위(app.js units) — 줄 안에서 쪼개지 않고, 넘칠 때만 단위 사이에서 줄을 넘긴다.
+   단위 하나가 한 줄보다 길면 그 안에서는 낱말 사이로 넘어간다 */
+.unit { display: inline-block; }
 
 /* ── 레벨 업 ──────────────────────────────────── */
 .levelup {
