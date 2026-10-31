@@ -516,18 +516,26 @@ function renderResult() {
 }
 
 /* 다음 스테이지 바로 가기 — 지금 스테이지 뒤에서 아직 안 끝낸 첫 스테이지(없으면 바로 다음 스테이지).
+   마지막 스테이지(12)를 끝냈거나 모든 스테이지를 끝냈으면 틀린 문제 풀기로 넘어간다.
    다시 풀기 판이면 남은 틀린 문제를 더 푼다 */
 function renderNextStage() {
   const b = $("btn-next-stage");
+  const wrong = wrongList().length;
   if (PACK.retry) {
-    const left = wrongList().length;
-    b.hidden = !left;
-    b.textContent = `틀린 문제 ${left}개 더 풀기 ▶`;
+    b.hidden = !wrong;
+    b.textContent = `틀린 문제 ${wrong}개 더 풀기 ▶`;
     b.onclick = startRetry;
     return;
   }
   const done = doneMap();
   const at = INDEX.topics.findIndex((t) => t.id === PACK.id);
+  const last = at === INDEX.topics.length - 1;
+  if (wrong && (last || INDEX.topics.every((t) => t.id in done))) {
+    b.hidden = false;
+    b.textContent = `틀린 문제 풀기 ▶ ${wrong}개 남았어요`;
+    b.onclick = startRetry;
+    return;
+  }
   const after = INDEX.topics.slice(at + 1).concat(INDEX.topics.slice(0, at));
   const next = after.find((t) => !(t.id in done)) ?? INDEX.topics[at + 1];
   b.hidden = !next;
