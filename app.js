@@ -206,8 +206,9 @@ function renderCommute() {
   let prev = got;                                   // 지난번에 서 있던 자리 — 거기서 걸어온다
   try { prev = Math.min(Number(localStorage.getItem(COMMUTE_KEY) ?? got), got); } catch { /* 저장이 막혀 있으면 걷지 않는다 */ }
 
-  // 회사원 앞에 남은 역 수 — 역 위에 서 있으면 그 역은 지난 것으로 센다
-  const left = STOPS.filter((_, i) => (i / (STOPS.length - 1)) * 100 > at(got)).length;
+  // 남은 거리는 스테이지 하나를 한 정거장으로 센다 — 아직 끝내지 않은 스테이지 수
+  const done = doneMap();
+  const left = INDEX.topics.filter((t) => !(t.id in done)).length;
   $("commute-note").textContent = left ? `회사까지 ${left}정거장` : "출근 완료!";
   $("metro").setAttribute("aria-label", `출근길 ${got} / ${max}`);
   $("metro").innerHTML =
