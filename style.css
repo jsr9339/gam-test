@@ -66,26 +66,42 @@ body { display: flex; flex-direction: column; overflow-x: hidden; }
 @keyframes drift-l { to { translate: -56px 0; } }
 @keyframes bob { 50% { transform: translateY(-3px); } }
 
+/* 땅 — 위에서부터 잔디 · 연석(인도) · 가운데 노란 점선이 있는 찻길 · 흙 */
 .ground {
   position: relative;
-  margin-top: auto; height: 72px; flex: none;
+  margin-top: auto; height: 96px; flex: none;
   background:
-    linear-gradient(var(--green-lite) 0 10px, var(--green) 10px 16px, transparent 16px),
-    repeating-conic-gradient(var(--dirt) 0 25%, var(--dirt2) 0 50%) 0 16px / 16px 16px;
+    repeating-linear-gradient(90deg, var(--yellow) 0 18px, transparent 18px 36px) 0 33px / 100% 3px no-repeat,
+    linear-gradient(var(--green-lite) 0 8px, var(--green) 8px 12px, #c9c9c9 12px 16px,
+                    #5a5f6b 16px 52px, transparent 52px),
+    repeating-conic-gradient(var(--dirt) 0 25%, var(--dirt2) 0 50%) 0 52px / 16px 16px;
   border-top: var(--px) solid #2f6b1f;
 }
-/* 땅 위 일하는 사람들 — 화면 가운데 460px 안에서 몇은 오가고, 몇은 제자리에서 들썩인다 */
+/* 출근길 — 화면 가운데 460px 안에 정류장이 있고, 사람들은 기다리거나 오가고, 버스가 서다 간다 */
 .crew { position: absolute; bottom: 100%; left: 50%; width: min(460px, 100%); height: 39px; transform: translateX(-50%); }
-.worker { position: absolute; bottom: -13px; width: 26px; height: 39px; overflow: visible; }
-.worker.w1 { left: 6%;  animation: walk 16s linear infinite alternate, bob .6s steps(1) infinite; }
-.worker.w2 { left: 34%; animation: bob 1.4s steps(1) infinite .3s; }
-.worker.w3 { left: 58%; animation: walk-back 13s linear infinite alternate, bob .6s steps(1) infinite .2s; }
-.worker.w4 { left: 84%; animation: bob 1.8s steps(1) infinite; }
-@keyframes walk { to { translate: 90px 0; } }
-@keyframes walk-back { to { translate: -80px 0; } }
+.shelter { position: absolute; left: 12%; bottom: -10px; width: 50px; height: 33px; }
+.stopsign { position: absolute; left: 30%; bottom: -10px; width: 23px; height: 43px; }
+.worker { position: absolute; z-index: 1; bottom: -13px; width: 26px; height: 39px; overflow: visible; }
+.worker.w1 { left: 50%; animation: walk 16s linear infinite alternate, bob .6s steps(1) infinite; }
+.worker.w2 { left: 18%; animation: bob 1.4s steps(1) infinite .3s; }            /* 정류장에서 기다림 */
+.worker.w3 { left: 88%; animation: walk-back 13s linear infinite alternate, bob .6s steps(1) infinite .2s; }
+.worker.w4 { left: 36%; animation: bob 1.8s steps(1) infinite; }               /* 정류장에서 기다림 */
+@keyframes walk { to { translate: 70px 0; } }
+@keyframes walk-back { to { translate: -70px 0; } }
+
+/* 버스 — 찻길 위(사람들 앞)를 달린다. 왼쪽 화면 밖에서 들어와 문이 정류장 앞에 오면 서고, 오른쪽으로 떠난다 */
+.bus { position: absolute; z-index: 2; bottom: -46px; left: calc(27% - 77px); width: 98px; height: 49px;
+  animation: bus-run 18s infinite, rumble .4s steps(1) infinite; }
+@keyframes bus-run {
+  0%   { left: calc(50% - 50vw - 110px); animation-timing-function: ease-out; }
+  28%  { left: calc(27% - 77px); }
+  50%  { left: calc(27% - 77px); animation-timing-function: ease-in; }
+  78%, 100% { left: calc(50% + 50vw + 20px); }
+}
+@keyframes rumble { 50% { transform: translateY(-1px); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .cloud, .worker { animation: none; }
+  .cloud, .worker, .bus { animation: none; }          /* 버스는 정류장 앞에 서 있다 */
 }
 
 #app {
