@@ -47,7 +47,9 @@ html, body {
   min-height: 100dvh;
   word-break: keep-all;
 }
-body { display: flex; flex-direction: column; overflow-x: hidden; }
+/* 버스가 화면 밖을 드나들어도 가로로 넓어지지 않게 — 폰 브라우저는 overflow-x: hidden 만으로는
+   레이아웃 폭이 넓어져 가운데 뜨는 창(레벨 업 · 출근 완료)이 옆으로 밀릴 때가 있다. clip 으로 아예 잘라 낸다 */
+body { display: flex; flex-direction: column; overflow-x: hidden; overflow-x: clip; }
 
 /* ── 하늘 · 구름 · 땅 ─────────────────────────── */
 .sky { position: absolute; inset: 0 0 auto 0; height: 420px; pointer-events: none; overflow: hidden; }
@@ -77,6 +79,7 @@ body { display: flex; flex-direction: column; overflow-x: hidden; }
                     #5a5f6b 16px 52px, transparent 52px),
     repeating-conic-gradient(var(--dirt) 0 25%, var(--dirt2) 0 50%) 0 52px / 16px 16px;
   border-top: var(--px) solid #2f6b1f;
+  overflow-x: clip;                                   /* 화면 밖으로 나간 버스가 페이지 폭을 늘리지 않게(위아래는 그대로 보인다) */
 }
 /* 출근길 — 화면 가운데 460px 안에 정류장이 있고, 사람들은 기다리거나 오가고, 버스가 서다 간다 */
 .crew { position: absolute; bottom: 100%; left: 50%; width: min(460px, 100%); height: 39px; transform: translateX(-50%); }
