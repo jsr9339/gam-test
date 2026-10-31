@@ -181,15 +181,48 @@ function renderGrid() {
       `<span class="tstage">STAGE ${i + 1}</span>` +
       `<span class="temoji">${t.emoji}</span>` +
       `<span class="ttitle">${t.title}</span>` +
-      `<span class="tblurb">${t.blurb}</span>` +
       (t.id in done
         ? `<span class="thearts">${[0, 1, 2, 3, 4]
             .map((k) => heartSvg(k < (hearts[t.id] ?? 0))).join("")}</span>` +
           `<span class="tscore">${done[t.id]}점</span>`
-        : "");
+        : "") +
+      `<span class="tstart">START</span>`;
     b.onclick = () => start(t.id);
     $("topic-grid").appendChild(b);
   });
+  renderCommute();
+}
+
+/* ── 출근길 노선도 — 맞힌 문제(하트) 하나에 한 걸음씩 집에서 회사로 ── */
+const STOPS = ["집", "연차", "퇴직", "수당", "안전", "보험", "회사"];
+const COMMUTE_KEY = "gam-test-commute";
+
+function renderCommute() {
+  const max = INDEX.topics.length * 5;
+  const got = Math.min(totalHearts(), max);
+  const at = (n) => (n / max) * 100;
+  let prev = got;                                   // 지난번에 서 있던 자리 — 거기서 걸어온다
+  try { prev = Math.min(Number(localStorage.getItem(COMMUTE_KEY) ?? got), got); } catch { /* 저장이 막혀 있으면 걷지 않는다 */ }
+
+  $("commute-note").textContent = got >= max ? "출근 완료!" : `회사까지 하트 ${max - got}개`;
+  $("metro").setAttribute("aria-label", `출근길 ${got} / ${max}`);
+  $("metro").innerHTML =
+    `<span class="rail"></span><span class="rail-done" style="width:${at(got)}%"></span>` +
+    STOPS.map((name, i) => {
+      const p = (i / (STOPS.length - 1)) * 100;
+      const end = i === 0 ? "home" : i === STOPS.length - 1 ? "office" : "";
+      return `<span class="stn${p <= at(got) ? " passed" : ""}${end ? " " + end : ""}" style="left:${p}%">` +
+        (end ? `<svg><use href="#px-${end}"/></svg>` : "<i></i>") + `<b>${name}</b></span>`;
+    }).join("") +
+    `<svg class="rider" style="left:${at(prev)}%"><use href="#px-me"/></svg>`;
+
+  if (prev !== got) {
+    const r = $("metro").querySelector(".rider");
+    r.classList.add("walking");
+    requestAnimationFrame(() => requestAnimationFrame(() => { r.style.left = `${at(got)}%`; }));
+    r.addEventListener("transitionend", () => r.classList.remove("walking"), { once: true });
+  }
+  try { localStorage.setItem(COMMUTE_KEY, String(got)); } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ }
 }
 
 async function start(id) {

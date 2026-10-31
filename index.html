@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<!-- 픽셀 그림 — 하트 · 빈 하트 · 동전 · 구름 · 나무 · 별(정답) · 직장인(내 답) · 땅 위 일하는 사람들 · 버스 · 정류장. 1칸 = 1px, 확대해도 각지게 -->
+<!-- 픽셀 그림 — 하트 · 빈 하트 · 동전 · 구름 · 나무 · 별(정답) · 직장인(내 답) · 땅 위 일하는 사람들 · 버스 · 정류장 · 집 · 회사(노선도). 1칸 = 1px, 확대해도 각지게 -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="px-heart" viewBox="0 0 9 8" shape-rendering="crispEdges">
@@ -108,6 +108,21 @@
       <path fill="#ffd23f" d="M3 3h3v1H3zM3 4h3v1H3z"/>
       <path fill="#6b6b7a" d="M4 7h1v1H4zM4 8h1v1H4zM4 9h1v1H4zM4 10h1v1H4zM4 11h1v1H4zM4 12h1v1H4zM4 13h1v1H4zM4 14h1v1H4zM3 15h3v1H3z"/>
     </symbol>
+    <symbol id="px-home" viewBox="0 0 11 11" shape-rendering="crispEdges">
+      <path fill="#2b1a14" d="M5 0h1v1H5zM4 1h1v1H4zM6 1h1v1H6zM3 2h1v1H3zM7 2h1v1H7zM2 3h1v1H2zM8 3h1v1H8zM1 4h1v1H1zM9 4h1v1H9zM0 5h1v1H0zM10 5h1v1H10zM1 6h1v1H1zM9 6h1v1H9zM1 7h1v1H1zM9 7h1v1H9zM1 8h1v1H1zM9 8h1v1H9zM1 9h1v1H1zM9 9h1v1H9zM2 10h7v1H2z"/>
+      <path fill="#e8352e" d="M5 1h1v1H5zM4 2h3v1H4zM3 3h5v1H3zM2 4h7v1H2z"/>
+      <path fill="#b3221c" d="M1 5h9v1H1z"/>
+      <path fill="#fff8e1" d="M2 6h7v1H2zM2 7h1v1H2zM5 7h1v1H5zM8 7h1v1H8zM2 8h1v1H2zM5 8h1v1H5zM8 8h1v1H8zM2 9h4v1H2zM8 9h1v1H8z"/>
+      <path fill="#bfe8f5" d="M3 7h2v1H3zM3 8h2v1H3z"/>
+      <path fill="#9a5b3a" d="M6 7h2v1H6zM6 8h2v1H6zM6 9h2v1H6z"/>
+    </symbol>
+    <symbol id="px-office" viewBox="0 0 11 11" shape-rendering="crispEdges">
+      <path fill="#2b1a14" d="M1 0h9v1H1zM0 1h1v1H0zM10 1h1v1H10zM0 2h1v1H0zM10 2h1v1H10zM0 3h1v1H0zM10 3h1v1H10zM0 4h1v1H0zM10 4h1v1H10zM0 5h1v1H0zM10 5h1v1H10zM0 6h1v1H0zM10 6h1v1H10zM0 7h1v1H0zM10 7h1v1H10zM0 8h1v1H0zM10 8h1v1H10zM0 9h1v1H0zM10 9h1v1H10zM1 10h9v1H1z"/>
+      <path fill="#6b7a99" d="M1 1h9v1H1zM1 2h1v1H1zM9 2h1v1H9zM1 3h9v1H1zM1 4h1v1H1zM9 4h1v1H9zM1 5h9v1H1zM1 6h1v1H1zM9 6h1v1H9zM1 7h9v1H1zM1 8h1v1H1zM9 8h1v1H9zM1 9h2v1H1zM8 9h2v1H8z"/>
+      <path fill="#ffe98a" d="M2 2h1v1H2zM4 2h1v1H4zM6 2h1v1H6zM8 2h1v1H8zM2 4h1v1H2zM4 4h1v1H4zM6 4h1v1H6zM8 4h1v1H8zM2 6h1v1H2zM4 6h1v1H4zM6 6h1v1H6zM8 6h1v1H8zM2 8h1v1H2zM8 8h1v1H8z"/>
+      <path fill="#55627d" d="M3 2h1v1H3zM5 2h1v1H5zM7 2h1v1H7zM3 4h1v1H3zM5 4h1v1H5zM7 4h1v1H7zM3 6h1v1H3zM5 6h1v1H5zM7 6h1v1H7zM3 8h1v1H3zM7 8h1v1H7zM3 9h1v1H3zM7 9h1v1H7z"/>
+      <path fill="#2b3a6b" d="M4 8h3v1H4zM4 9h3v1H4z"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -143,6 +158,11 @@
         스테이지를 골라 5문제를 풀고 하트를 모으세요.
         <svg class="coin" aria-hidden="true"><use href="#px-coin"/></svg>
       </p>
+    </div>
+    <!-- 출근길 노선도 — 맞힌 문제(하트) 수만큼 회사원이 집에서 회사 쪽으로 간다 -->
+    <div class="commute">
+      <div class="commute-head"><span>출근길 노선도</span><span id="commute-note"></span></div>
+      <div id="metro" class="metro"></div>
     </div>
     <p id="progress-note" class="fineprint" style="text-align:left"></p>
     <div id="topic-grid" class="grid"></div>
