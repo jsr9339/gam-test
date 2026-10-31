@@ -209,7 +209,8 @@ function renderResult() {
       <p class="react ${hit ? "hit" : pct > 40 ? "miss" : ""}">${reactionOf(q, mine, pct)}</p>
       ${q.type === "choice" ? choiceBody(q, mine) : sliderBody(q, mine)}
       <p class="why">💡 ${q.why}</p>
-      <details><summary>근거 보기</summary><p class="basis">${q.basis}</p></details>`;
+      <details><summary>근거 보기</summary><p class="basis">${q.basis}</p>${
+        q.limit ? `<p class="basis">⚠️ 한계 · ${q.limit}</p>` : ""}</details>`;
     box.appendChild(el);
   });
 
@@ -288,7 +289,7 @@ async function share() {
   const grade = $("grade").textContent;
   const url = `${location.origin}${location.pathname}` +
     `?t=${encodeURIComponent(PACK.id)}&s=${total}&g=${encodeURIComponent(grade)}`;
-  const text = `감 테스트 · ${PACK.title} ${total}점 · ${grade}`;
+  const text = `${INDEX.title} · ${PACK.title} ${total}점 · ${grade}`;
   try {
     if (navigator.share) { await navigator.share({ title: INDEX.title, text, url }); return; }
     await navigator.clipboard.writeText(`${text}\n${url}`);

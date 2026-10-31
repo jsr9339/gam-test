@@ -1,6 +1,6 @@
 {
-  "title": "출근길 감 테스트",
-  "subtitle": "출근길 숫자, 당신의 감은 몇 점?",
+  "title": "굿모닝 노동법!",
+  "subtitle": "출근길에 알아보는 슬기로운 직장생활",
   "grades": [
     {
       "min": 90,
@@ -52,81 +52,95 @@
   ],
   "topics": [
     {
-      "id": "seoul-heat",
-      "emoji": "🌡️",
-      "title": "서울은 얼마나 더워졌나",
-      "blurb": "1950년부터 2024년까지, 서울의 매일 기온",
-      "source": "Open-Meteo Archive (ERA5 재분석)"
+      "id": "labor-leave",
+      "emoji": "🏖️",
+      "title": "연차유급휴가의 모든 것",
+      "blurb": "며칠 생기고, 언제 늘고, 언제 사라지나",
+      "source": "국가법령정보센터 근로기준법"
     },
     {
-      "id": "seoul-rain",
-      "emoji": "☔",
-      "title": "비는 언제, 얼마나",
-      "blurb": "서울의 하루치 강수량 30년",
-      "source": "Open-Meteo Archive (ERA5 재분석)"
+      "id": "labor-retire",
+      "emoji": "💼",
+      "title": "퇴직과 퇴직금 제대로 알기",
+      "blurb": "누가, 얼마를, 언제까지 받나",
+      "source": "국가법령정보센터 퇴직급여법"
     },
     {
-      "id": "seoul-air",
-      "emoji": "😷",
-      "title": "미세먼지, 언제 나쁜가",
-      "blurb": "서울의 시간별 초미세먼지 2년치",
-      "source": "Open-Meteo Air Quality (CAMS)"
+      "id": "labor-hours",
+      "emoji": "⏱️",
+      "title": "근로시간과 휴게시간의 비밀",
+      "blurb": "주 몇 시간, 쉬는 시간은 얼마나",
+      "source": "국가법령정보센터 근로기준법"
     },
     {
-      "id": "working-hours",
-      "emoji": "⏰",
-      "title": "우리는 얼마나 일하나",
-      "blurb": "나라별 1인당 연간 노동시간",
-      "source": "Our World in Data"
+      "id": "labor-wage",
+      "emoji": "💰",
+      "title": "임금과 수당, 제대로 알고 받기",
+      "blurb": "더 받는 시간, 쉬어도 받는 돈",
+      "source": "국가법령정보센터 근로기준법 · 최저임금법"
     },
     {
-      "id": "population",
+      "id": "labor-bully",
+      "emoji": "🚫",
+      "title": "직장 내 괴롭힘, 어디까지가 괴롭힘일까?",
+      "blurb": "누가 처벌받고, 회사는 무엇을 해야 하나",
+      "source": "국가법령정보센터 근로기준법"
+    },
+    {
+      "id": "labor-harass",
+      "emoji": "⚖️",
+      "title": "직장 내 성희롱과 성차별 바로 알기",
+      "blurb": "예방 교육부터 신고 뒤 보호까지",
+      "source": "국가법령정보센터 남녀고용평등법"
+    },
+    {
+      "id": "labor-family",
       "emoji": "👶",
-      "title": "인구와 출산",
-      "blurb": "전 세계 출산율과 한국의 인구 구조",
-      "source": "World Bank Open Data"
+      "title": "출산·육아와 일·가정 양립 제도",
+      "blurb": "출산휴가, 배우자 휴가, 육아휴직",
+      "source": "국가법령정보센터 남녀고용평등법 · 근로기준법"
     },
     {
-      "id": "internet",
-      "emoji": "🌐",
-      "title": "인터넷과 연결",
-      "blurb": "나라별 인터넷 사용 인구 비율",
-      "source": "World Bank Open Data"
+      "id": "labor-safety",
+      "emoji": "⛑️",
+      "title": "산업재해와 근로자의 안전보건 권리",
+      "blurb": "중대재해처벌법이 정한 선",
+      "source": "국가법령정보센터 중대재해처벌법"
     },
     {
-      "id": "usdkrw",
-      "emoji": "💵",
-      "title": "원달러 환율 26년",
-      "blurb": "1999년부터 오늘까지의 원달러 환율",
-      "source": "Frankfurter (유럽중앙은행 고시)"
+      "id": "labor-contract",
+      "emoji": "📝",
+      "title": "수습·시용·계약직 근로자의 권리",
+      "blurb": "기간제 · 단시간 · 수습이 알아야 할 숫자",
+      "source": "국가법령정보센터 기간제법 · 최저임금법"
     },
     {
-      "id": "cities",
-      "emoji": "🏙️",
-      "title": "서울·도쿄·런던·싱가포르",
-      "blurb": "네 도시의 30년 평년값 (1991~2020)",
-      "source": "Open-Meteo Archive (ERA5 재분석)"
+      "id": "labor-dismiss",
+      "emoji": "📮",
+      "title": "해고와 징계, 회사 마음대로 할 수 있을까?",
+      "blurb": "통보 방법, 대응 기한, 감봉의 한도",
+      "source": "국가법령정보센터 근로기준법"
     },
     {
-      "id": "quakes",
-      "emoji": "🌎",
-      "title": "지진은 얼마나 자주",
-      "blurb": "2000~2024년 전 세계 지진 기록",
-      "source": "USGS 지진 카탈로그"
+      "id": "ins-employ",
+      "emoji": "🧾",
+      "title": "실업급여와 고용보험",
+      "blurb": "실업급여 · 육아휴직 급여를 받으려면",
+      "source": "국가법령정보센터 고용보험법"
     },
     {
-      "id": "life",
-      "emoji": "🩺",
-      "title": "얼마나 오래 사나",
-      "blurb": "나라별 기대수명 1950~현재",
-      "source": "Our World in Data"
+      "id": "ins-pension",
+      "emoji": "👵",
+      "title": "국민연금, 언제 얼마나 받나",
+      "blurb": "가입 나이, 최소 가입기간, 앞당기기와 미루기",
+      "source": "국가법령정보센터 국민연금법"
     },
     {
-      "id": "seoul-snow",
-      "emoji": "❄️",
-      "title": "서울에는 눈이 얼마나 오나",
-      "blurb": "1990년부터 2024년까지, 서울의 하루 강설량",
-      "source": "Open-Meteo Archive (ERA5 재분석)"
+      "id": "ins-health",
+      "emoji": "🏥",
+      "title": "건강보험료, 누가 얼마나 내나",
+      "blurb": "보험료율 상한, 회사와 나누는 비율",
+      "source": "국가법령정보센터 국민건강보험법"
     }
   ]
 }
