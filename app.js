@@ -1,6 +1,6 @@
 /* 굿모닝 노동법! — 주제 고르기 · 진행 · 채점 · 하트 · 레벨 · 결과 · 공유
  *
- * 계산은 전부 여기서 끝난다. 서버는 촌평 한 줄을 받을 때만 부른다.
+ * 계산은 전부 여기서 끝난다. 서버는 부르지 않는다.
  * 원본 데이터는 이 앱에 들어오지 않는다 — topics/*.json 에 정답과 근거만 있다.
  */
 
@@ -28,10 +28,33 @@ function markDone(id, score) {
   } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ }
 }
 
+/* 문항마다 한 번이라도 맞혔는지 — «틀린 문제만 다시 풀기»가 여기서 고른다. { 주제: [true, false, …] } */
+const HITS_KEY = "gam-test-hits";
+const FREEPASS_KEY = "gam-test-freepass";     // 출근 완료 프리패스권을 썼는지
+const SOUND_KEY = "gam-test-sound";           // "off" 면 빵빠레를 울리지 않는다
+const store = {
+  get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ } },
+};
+/* 이번에 맞힌 문항을 더한다(한 번 맞힌 문항은 맞힌 채로 남는다). 그 주제의 맞힌 문항 수를 돌려준다 */
+function addHits(id, i, hit, len = 5) {
+  const m = store.get(HITS_KEY, {});
+  const row = m[id] ?? Array(len).fill(false);
+  row[i] = row[i] || hit;
+  m[id] = row;
+  store.set(HITS_KEY, m);
+  return row.filter(Boolean).length;
+}
+/* 다시 풀 틀린 문항 — 끝낸 주제에서 아직 한 번도 못 맞힌 문항 */
+function wrongList() {
+  const m = store.get(HITS_KEY, {});
+  return INDEX.topics.flatMap((t) => (m[t.id] ?? []).map((h, i) => (h ? null : { id: t.id, i })).filter(Boolean));
+}
+
 /* ── 하트 · 레벨 ─────────────────────────────────────
  * 한 문항에 하트 1개 — 택1은 맞히면, 슬라이더는 오차 20% 안이면.
- * 주제마다 «가장 많이 받은 하트»만 남기고, 그 합으로 레벨을 정한다.
- * 같은 주제를 다시 풀어 하트를 불릴 수는 없다.
+ * 주제마다 «한 번이라도 맞힌 문항 수»(최대 5)를 하트로 남기고, 그 합으로 레벨을 정한다.
+ * 틀린 문항을 다시 풀어 맞히면 그 주제의 하트가 채워진다.
  */
 const HEART_KEY = "gam-test-hearts";
 const HEART_PCT = 20;
@@ -128,15 +151,7 @@ function josa(w) {
   if (c < 0xac00 || c > 0xd7a3) return "을";
   return (c - 0xac00) % 28 ? "을" : "를";
 }
-/* Gemini 에게는 숫자가 아니라 방향만 보낸다 */
-function directionOf(q, mine) {
-  if (q.type === "choice") return mine === q.answer ? "맞힘" : "틀림";
-  const d = (mine - q.answer) / Math.abs(q.answer);
-  if (Math.abs(d) <= 0.08) return "비슷";
-  return d > 0 ? "높게" : "낮게";
-}
-
-/* 제목의 줄바꿈(\n)은 스테이지 카드에서만 쓴다. 공유 문구 · 촌평 요청에는 한 줄로 */
+/* 제목의 줄바꿈(\n)은 스테이지 카드에서만 쓴다. 공유 문구에는 한 줄로 */
 const oneLine = (s) => s.replace(/\s*\n\s*/g, " ");
 
 /* 문항 문장(text)의 \n 은 의미 단위 경계다. 단위마다 줄 안에서 쪼개지지 않는 덩어리로 감싸,
@@ -156,9 +171,9 @@ function show(name) {
 /* ── 시작 ────────────────────────────────────────── */
 async function boot() {
   INDEX = await (await fetch("topics.json")).json();
-  // 제목의 '감' 한 글자에 형광펜을 칠한다
-  $("title").innerHTML = INDEX.title.replace("감", "<mark>감</mark>");
+  $("title").textContent = INDEX.title;
   $("subtitle").textContent = INDEX.subtitle;
+  $("as-of").textContent = INDEX.as_of || "";
 
   const p = new URLSearchParams(location.search);
   if (p.has("s")) {
@@ -166,7 +181,10 @@ async function boot() {
     const t = INDEX.topics.find((x) => x.id === p.get("t"));
     $("shared-banner").innerHTML =
       `친구가 ${t ? `<b>${t.emoji} ${t.title}</b> 에서 ` : ""}` +
-      `<b>${Number(p.get("s"))}점 · ${g}</b>${josa(g || "점")} 받았습니다. 당신은요?`;
+      `<b>${Number(p.get("s"))}점 · ${g}</b>${josa(g || "점")} 받았습니다.` +
+      (p.has("r") ? ` 지금 직급은 <b>${p.get("r")}</b>, ` +
+        (Number(p.get("st")) ? `회사까지 <b>${Number(p.get("st"))}정거장</b> 남았어요.` : `<b>출근 완료!</b>`) : "") +
+      ` 당신은요?`;
     $("shared-banner").hidden = false;
   }
 
@@ -179,6 +197,10 @@ async function boot() {
   $("btn-back").onclick = () => show("home");
   $("btn-more").onclick = () => { renderGrid(); show("home"); };
   $("btn-share").onclick = share;
+  $("btn-retry").onclick = startRetry;
+  $("btn-pass").onclick = usePass;
+  $("btn-sound").onclick = () => { store.set(SOUND_KEY, soundOn() ? "off" : "on"); renderSound(); };
+  renderSound();
   if (p.has("t")) {
     const t = INDEX.topics.find((x) => x.id === p.get("t"));
     if (t && !p.has("s")) start(t.id);
@@ -210,6 +232,76 @@ function renderGrid() {
     $("topic-grid").appendChild(b);
   });
   renderCommute();
+  renderTools();
+}
+
+/* 노선도 진행 — 끝낸 스테이지 수, 프리패스권을 썼으면 회사 */
+function commute() {
+  const max = INDEX.topics.length;
+  const done = doneMap();
+  const got = store.get(FREEPASS_KEY, false) ? max : INDEX.topics.filter((t) => t.id in done).length;
+  return { max, got, left: max - got };
+}
+
+/* ── 맨 아래 두 칸 ─────────────────────────────────── */
+function renderTools() {
+  const wrong = wrongList().length;
+  const r = $("btn-retry");
+  r.classList.toggle("off", !wrong);
+  r.innerHTML =
+    `<span class="tstage">REVIEW</span><span class="temoji">📝</span>` +
+    `<span class="ttitle">틀린 문제만\n다시 풀기</span>` +
+    `<span class="tnote">${wrong ? `틀린 문제 ${wrong}개 · 5개씩` : "다시 풀 문제가 없어요"}</span>` +
+    `<span class="tstart">${wrong ? "START" : "CLEAR"}</span>`;
+
+  const arrived = commute().left === 0;
+  $("btn-pass").innerHTML = arrived
+    ? `<span class="tstage">RESTART</span><span class="temoji">🏠</span>` +
+      `<span class="ttitle">처음부터\n다시 출근하기</span>` +
+      `<span class="tnote">하트 · 직급 · 노선도를 지우고 집에서 출발</span>` +
+      `<span class="tstart">다시 출근</span>`
+    : `<span class="tstage">FREE PASS</span><span class="temoji">🎫</span>` +
+      `<span class="ttitle">출근 완료\n프리패스권</span>` +
+      `<span class="tnote">문제를 건너뛰고 바로 회사로</span>` +
+      `<span class="tstart">사용하기</span>`;
+}
+
+function usePass() {
+  if (commute().left === 0) {
+    if (!confirm("처음부터 다시 출근할까요?\n하트 · 직급 · 노선도 · 점수 기록이 모두 지워져요.")) return;
+    [DONE_KEY, HEART_KEY, HITS_KEY, FREEPASS_KEY, COMMUTE_KEY].forEach((k) => {
+      try { localStorage.removeItem(k); } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ }
+    });
+    renderHud();
+    renderGrid();
+    return;
+  }
+  store.set(FREEPASS_KEY, true);
+  renderGrid();                                   // 회사원이 회사까지 걸어가고 출근 완료 축하가 터진다
+}
+
+/* 틀린 문항을 5개씩 모아 한 판으로 푼다 — 맞히면 원래 주제의 하트가 채워진다 */
+async function startRetry() {
+  const list = wrongList().slice(0, 5);
+  if (!list.length) return;
+  const packs = {};
+  for (const { id } of list) packs[id] ??= await (await fetch(`topics/${id}.json`)).json();
+  PACK = {
+    id: "retry", retry: true, emoji: "📝", title: "틀린 문제 다시 풀기", caveat: "",
+    questions: list.map(({ id, i }) => ({ ...packs[id].questions[i], _stage: id, _i: i })),
+  };
+  idx = 0; answers = []; stageHits = [];
+  $("topic-name").textContent = `${PACK.emoji} ${PACK.title}`;
+  renderStageHearts();
+  renderQ();
+  show("quiz");
+}
+
+/* ── 소리 켜기 · 끄기 ───────────────────────────────── */
+function soundOn() { return store.get(SOUND_KEY, "on") !== "off"; }
+function renderSound() {
+  $("btn-sound").textContent = soundOn() ? "🔊 소리 켜짐" : "🔇 소리 꺼짐";
+  $("btn-sound").setAttribute("aria-pressed", String(soundOn()));
 }
 
 /* ── 출근길 노선도 — 스테이지 하나를 끝낼 때마다 한 정거장씩 집에서 회사로 ── */
@@ -217,14 +309,12 @@ const STOPS = ["집", "연차", "퇴직", "수당", "안전", "보험", "회사"
 const COMMUTE_KEY = "gam-test-commute-stage";      // 지난번 자리(끝낸 스테이지 수) — 하트로 세던 예전 값과 섞이지 않게 새 이름
 
 function renderCommute() {
-  const done = doneMap();
-  const max = INDEX.topics.length;
-  const got = INDEX.topics.filter((t) => t.id in done).length;
+  const { max, got, left } = commute();
   const at = (n) => (n / max) * 100;
   let prev = got;                                   // 지난번에 서 있던 자리 — 거기서 걸어온다
   try { prev = Math.min(Number(localStorage.getItem(COMMUTE_KEY) ?? got), got); } catch { /* 저장이 막혀 있으면 걷지 않는다 */ }
 
-  const left = max - got;                           // 남은 정거장 = 아직 끝내지 않은 스테이지 수
+  // 남은 정거장 = 아직 끝내지 않은 스테이지 수(프리패스권을 썼으면 0)
   $("commute-note").textContent = left ? `회사까지 ${left}정거장` : "출근 완료!";
   $("metro").setAttribute("aria-label", `출근길 ${got} / ${max}`);
   $("metro").innerHTML =
@@ -265,6 +355,7 @@ function celebrate() {
 }
 
 function fanfare() {
+  if (!soundOn()) return;
   try {
     const ac = new (window.AudioContext || window.webkitAudioContext)();
     // 빠 · 바 · 바 · 밤! — 도 · 미 · 솔 · 높은 도, 마지막은 길게
@@ -357,12 +448,17 @@ function renderResult() {
     PACK.questions.map((q, i) => scoreOne(q, answers[i]))
       .reduce((a, b) => a + b, 0) / PACK.questions.length);
   const g = gradeOf(total);
-  markDone(PACK.id, total);
+  if (!PACK.retry) markDone(PACK.id, total);       // 다시 풀기 판은 스테이지 기록이 아니다
 
-  const got = PACK.questions.filter((q, i) => isHit(q, answers[i])).length;
+  const hits = PACK.questions.map((q, i) => isHit(q, answers[i]));
+  const got = hits.filter(Boolean).length;
   const before = levelOf(totalHearts());
-  const best = heartMap()[PACK.id] ?? 0;
-  saveHearts(PACK.id, got);
+  const best = PACK.retry ? 0 : heartMap()[PACK.id] ?? 0;
+  // 맞힌 문항을 원래 주제에 더하고, 그 주제의 하트를 «한 번이라도 맞힌 문항 수»로 맞춘다
+  PACK.questions.forEach((q, i) => {
+    const id = PACK.retry ? q._stage : PACK.id;
+    saveHearts(id, addHits(id, PACK.retry ? q._i : i, hits[i]));
+  });
   const after = levelOf(totalHearts());
   renderHud();
 
@@ -374,8 +470,10 @@ function renderResult() {
     `<span class="hg-row">${PACK.questions.map((q, i) =>
       `<span class="pop" style="animation-delay:${i * 0.18}s">${heartSvg(isHit(q, answers[i]))}</span>`
     ).join("")}</span>` +
-    `<span class="hg-text">하트 ${got}개 획득` +
-    (got > best ? (best ? ` · 최고 기록 갱신 (+${got - best})` : "") : best ? ` · 최고 기록 ${best}개` : "") +
+    `<span class="hg-text">` + (PACK.retry
+      ? `틀린 문제 ${PACK.questions.length}개 중 ${got}개를 맞혀 하트를 채웠어요`
+      : `하트 ${got}개 획득` +
+        (got > best ? (best ? ` · 최고 기록 갱신 (+${got - best})` : "") : best ? ` · 최고 기록 ${best}개` : "")) +
     `</span>`;
   if (after.lv > before.lv) {
     setTimeout(() => showLevelup(before.lv, after.lv), PACK.questions.length * 180 + 500);
@@ -395,17 +493,18 @@ function renderResult() {
       ${q.type === "choice" ? choiceBody(q, mine) : sliderBody(q, mine)}
       <p class="why">💡 ${q.why}</p>
       <details><summary>근거 보기</summary><p class="basis">${q.basis}</p>${
-        q.limit ? `<p class="basis">⚠️ 한계 · ${q.limit}</p>` : ""}</details>`;
+        q.limit ? `<p class="basis">⚠️ 한계 · ${q.limit}</p>` : ""}${
+        (q.links || []).length ? `<p class="basis links">📜 원문 보기 · ${q.links.map((l) =>
+          `<a href="${l.url}" target="_blank" rel="noopener">${l.label} ↗</a>`).join(" · ")}</p>` : ""}</details>`;
     box.appendChild(el);
   });
 
   $("caveat").hidden = !PACK.caveat;
   if (PACK.caveat) $("caveat").innerHTML = `<b>이 데이터의 한계</b><br>${PACK.caveat}`;
-  $("source").innerHTML =
+  $("source").innerHTML = PACK.retry ? "" :
     `출처 <a href="${PACK.source_url}" target="_blank" rel="noopener">${PACK.source}</a>`;
 
   requestAnimationFrame(() => setTimeout(animate, 60));
-  askComment(total, g.name);
 }
 
 function choiceBody(q, mine) {
@@ -443,38 +542,17 @@ function animate() {
   document.querySelectorAll(".track .live").forEach((m) => (m.style.left = m.dataset.left + "%"));
 }
 
-/* ── 촌평 — 없어도 앱은 그대로 돈다 ──────────────── */
-async function askComment(total, grade) {
-  const el = $("ai-comment");
-  el.hidden = false;
-  el.innerHTML = `<span class="tag">촌평을 받아오는 중…</span>`;
-  const directions = PACK.questions.map((q, i) => directionOf(q, answers[i]));
-  try {
-    const ctl = new AbortController();
-    const timer = setTimeout(() => ctl.abort(), 3000);
-    const r = await fetch("/api/comment", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ score: total, grade, directions, topic: oneLine(PACK.title) }),
-      signal: ctl.signal,
-    });
-    clearTimeout(timer);
-    const j = await r.json();
-    if (!j || !j.comment) { el.hidden = true; return; }
-    el.innerHTML = `<span class="tag">한 줄 촌평</span><br>${j.comment}` +
-      (j.nickname ? `<br><span class="nick">${j.nickname}</span>` : "");
-  } catch {
-    el.hidden = true;
-  }
-}
-
 /* ── 공유 ────────────────────────────────────────── */
 async function share() {
   const total = $("score").textContent.replace(/[^0-9]/g, "");
   const grade = $("grade").textContent;
+  const rank = levelOf(totalHearts()).rank;
+  const { left } = commute();
   const url = `${location.origin}${location.pathname}` +
-    `?t=${encodeURIComponent(PACK.id)}&s=${total}&g=${encodeURIComponent(grade)}`;
-  const text = `${INDEX.title} · ${oneLine(PACK.title)} ${total}점 · ${grade}`;
+    `?t=${encodeURIComponent(PACK.id)}&s=${total}&g=${encodeURIComponent(grade)}` +
+    `&r=${encodeURIComponent(rank)}&st=${left}`;
+  const text = `${INDEX.title} · ${oneLine(PACK.title)} ${total}점 · ${grade} · ` +
+    `지금 직급 ${rank} · ${left ? `회사까지 ${left}정거장` : "출근 완료!"}`;
   try {
     if (navigator.share) { await navigator.share({ title: INDEX.title, text, url }); return; }
     await navigator.clipboard.writeText(`${text}\n${url}`);

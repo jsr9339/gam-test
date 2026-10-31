@@ -20,6 +20,7 @@ import datetime as dt
 from collections import Counter
 from pathlib import Path
 from statistics import mean
+from urllib.parse import quote
 
 # 윈도우 콘솔(cp949)은 이모지 · 기호를 못 찍고 멈춘다. 출력만 UTF-8 로 맞춘다
 try:
@@ -171,6 +172,9 @@ def dotted(iso):
     return f"{int(y)}. {int(m)}. {int(d)}."
 
 
+AS_OF = (2026, 11)          # 법령 기준일(년, 월) — 데이터 한계 문장과 첫 화면 «법령 기준일»이 같이 쓴다
+
+
 def as_of():
     """이 주제가 쓴 조문의 시행일과 시행 예정 개정으로 «언제 기준인가» 한 문장을 만든다.
 
@@ -183,7 +187,7 @@ def as_of():
     soon = sorted({(a["effective"], law(n)["short"], no) for n, no in used
                    for a in law(n)["articles"]
                    if a["no"] == no and a["status"] == "예정" and a["effective"]})
-    head = f"2026년 11월 기준 최신 개정 법령({base})을 기준으로 한 것으로, "
+    head = f"{AS_OF[0]}년 {AS_OF[1]}월 기준 최신 개정 법령({base})을 기준으로 한 것으로, "
     if not soon:
         return head + "이후 법 개정에 따라 답이 변경될 수 있습니다."
     planned = ", ".join(f"{s} {no}({dotted(eff)})" for eff, s, no in soon)
@@ -703,6 +707,30 @@ def one_line(s):
     return " ".join(s.split())
 
 
+def article_links(text):
+    """근거 문장 속 «법령(시행일) 제N조» 마다 국가법령정보센터 조문 링크를 나온 순서대로 만든다."""
+    by_short = {L["short"]: L for L in LAWS.values()}
+    pat = re.compile("(" + "|".join(map(re.escape, by_short)) +
+                     r")\(\d{4}\. \d{1,2}\. \d{1,2}\. 시행\) (제\d+조(?:의\d+)?)")
+    out = []
+    for m in pat.finditer(text):
+        L, no = by_short[m[1]], m[2]
+        item = {"label": f"{L['short']} {no}",
+                "url": "https://www.law.go.kr/" + quote(f"법령/{L['law']}/{no}")}
+        if item not in out:
+            out.append(item)
+    return out
+
+
+def EXTRA_LINKS():
+    """근거 문장에 조문이 직접 나오지 않는 문항의 원문 링크 — lv4 는 lv3 와 같은 계산(제60조), wg5 는 고시 표."""
+    return {
+        "lv4": article_links(cite(KLS, "제60조")),
+        "wg5": [{"label": "최저임금위원회 결정현황",
+                 "url": "https://www.minimumwage.go.kr/minWage/policy/decisionMain.do"}],
+    }
+
+
 def write_labor():
     """노동법 · 보험 주제만 쓰고, topics.json 목록을 이 주제들로 바꾼다.
 
@@ -712,6 +740,9 @@ def write_labor():
     OUT.mkdir(parents=True, exist_ok=True)
     for t in TOPICS:
         assert len(t["questions"]) == 5, f"{t['id']}: 문항이 5개가 아닙니다"
+        for q in t["questions"]:
+            # 근거 보기의 «조문 원문» 링크 — 근거 문장이 조문을 직접 들지 않는 문항은 따로 단다
+            q["links"] = article_links(q["basis"]) or EXTRA_LINKS().get(q["id"], [])
         pack = {k: t[k] for k in ("id", "emoji", "title", "blurb",
                                   "source", "source_url", "caveat")}
         pack["questions"] = t["questions"]
@@ -721,6 +752,7 @@ def write_labor():
     idx = json.load(io.open(APP / "topics.json", encoding="utf-8"))
     idx["topics"] = [{k: t[k] for k in ("id", "emoji", "title", "blurb", "source")}
                      for t in TOPICS]
+    idx["as_of"] = f"{AS_OF[0]}. {AS_OF[1]}."
     io.open(APP / "topics.json", "w", encoding="utf-8").write(
         json.dumps(idx, ensure_ascii=False, indent=2))
 

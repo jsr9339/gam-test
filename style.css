@@ -121,7 +121,7 @@ h2 { font-size: 19px; line-height: 1.5; margin: 0 0 18px; }
 .fineprint { font-size: 12px; color: var(--ink); opacity: .75; text-align: center; margin-top: 16px; }
 
 /* 픽셀 패널 — 외곽선 + 오른쪽 아래 그늘 + 깎은 모서리 */
-.hud, .hero, .tcard, .qbox, .choice, .card, .ai, .caveat, .banner, button.primary, button.ghost,
+.hud, .hero, .tcard, .qbox, .choice, .card, .caveat, .banner, button.primary, button.ghost,
 .score-card, .lu-box, #q-slider, .commute {
   border: var(--px) solid var(--ink);
   clip-path: var(--corner);
@@ -242,6 +242,24 @@ svg.hp.off { opacity: .55; }
   display: block; margin-top: auto; padding: 7px 0; text-align: center;
   font-family: var(--arcade); font-size: 9px; color: #fff;
   background: var(--red); border: 3px solid var(--ink);
+}
+
+/* 맨 아래 두 칸(다시 풀기 · 프리패스권) — 스테이지 카드와 같은 틀, 버튼만 남색 */
+.tcard.tool { background: #eef4ff; }
+.tcard.tool .tstart { background: var(--night); font-family: var(--pixel); font-size: 13px; padding: 5px 0; }
+.tcard.tool.off { cursor: default; opacity: .6; }
+.tcard.tool.off:active { transform: none; }
+.tnote { font-size: 11.5px; color: var(--muted); line-height: 1.45; }
+
+/* 빵빠레 안내 · 소리 켜기/끄기 */
+.sound-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-size: 12.5px; margin: -4px 2px 4px;
+}
+.sound-toggle {
+  width: auto; flex: none; padding: 5px 10px; font-size: 12px;
+  background: var(--panel); border: 3px solid var(--ink);
+  box-shadow: inset 0 -3px 0 var(--panel-edge);
 }
 .thearts { display: flex; gap: 2px; padding-top: 4px; }
 .thearts svg.hp { width: 15px; height: 14px; }
@@ -368,11 +386,6 @@ input[type=range]::-moz-range-thumb {
 @keyframes pop { 0% { transform: scale(0) } 70% { transform: scale(1.3) } 100% { transform: scale(1) } }
 .hg-text { font-size: 13px; color: #fff; }
 
-/* ── 결과 — 촌평 ─────────────────────────────── */
-.ai { background: var(--panel); padding: 14px 15px; font-size: 14px; margin-bottom: 14px; }
-.ai .tag { font-family: var(--arcade); font-size: 8px; color: var(--muted); }
-.ai .nick { color: var(--red); font-weight: 700; }
-
 /* ── 결과 — 문항 카드 ─────────────────────────── */
 .card {
   background: var(--panel); padding: 15px 14px 12px; margin-bottom: 12px;
@@ -422,6 +435,7 @@ summary::-webkit-details-marker { display: none; }
 summary::before { content: "▶ "; }
 details[open] summary::before { content: "▼ "; }
 .basis { font-family: var(--read); font-size: 12.5px; color: var(--muted); margin: 8px 0 0; line-height: 1.7; }
+.basis.links a { color: var(--ink); font-weight: 700; text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
 /* ── 이 데이터의 한계 ─────────────────────────── */
 .caveat {

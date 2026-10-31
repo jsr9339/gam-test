@@ -4,7 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>굿모닝 노동법! — 출근길에 알아보는 슬기로운 직장생활</title>
-<meta name="description" content="출근길에 알아보는 슬기로운 직장생활. 노동법 · 4대 보험 13개 주제, 주제당 5문항.">
+<meta name="description" content="출근길에 알아보는 슬기로운 직장생활. 노동법 · 4대 보험 12개 주제, 주제당 5문항.">
+<!-- 링크 공유 미리보기(카톡 · 슬랙 등) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gam-test-delta.vercel.app/">
+<meta property="og:title" content="굿모닝 노동법! — 출근길에 알아보는 슬기로운 직장생활">
+<meta property="og:description" content="노동법 · 4대 보험 12스테이지 60문항. 문제를 맞히며 인턴에서 대표이사로, 집에서 회사로 출근해요.">
+<meta property="og:image" content="https://gam-test-delta.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@2.39.3/dist/galmuri.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -162,8 +171,18 @@
       <div id="metro" class="metro"></div>
     </div>
     <div id="topic-grid" class="grid"></div>
+    <!-- 맨 아래 두 칸 — 틀린 문제만 다시 풀기 · 출근 완료 프리패스권(출근을 마치면 «처음부터 다시 출근하기») -->
+    <div class="grid">
+      <button id="btn-retry" class="tcard tool"></button>
+      <button id="btn-pass" class="tcard tool"></button>
+    </div>
+    <div class="sound-row">
+      <span>🎺 출근 완료 · 대표이사 취임 때 빵빠레가 울려요</span>
+      <button id="btn-sound" class="sound-toggle" type="button"></button>
+    </div>
     <p class="fineprint">모든 정답은 법령 원문에서 직접 뽑았습니다.<br>
-      결과 화면의 <b>근거 보기</b>를 누르면 어디서 뽑았는지 나옵니다.</p>
+      결과 화면의 <b>근거 보기</b>에서 조문 원문으로 바로 갈 수 있습니다.<br>
+      법령 기준일 <span id="as-of"></span></p>
   </section>
 
   <!-- 문항 ───────────────────────────────────── -->
@@ -201,7 +220,6 @@
       <div id="heart-gain" class="heart-gain"></div>
     </div>
 
-    <div id="ai-comment" class="ai" hidden></div>
 
     <div id="cards"></div>
 
