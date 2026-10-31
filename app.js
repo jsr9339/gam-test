@@ -51,8 +51,9 @@ function saveHearts(id, n) {
     localStorage.setItem(HEART_KEY, JSON.stringify(m));
   } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ }
 }
+/* 지금 목록에 있는 주제의 하트만 센다 — 합치거나 뺀 주제의 하트가 레벨에 남지 않게 */
 function totalHearts(m = heartMap()) {
-  return Object.values(m).reduce((a, b) => a + b, 0);
+  return INDEX.topics.reduce((a, t) => a + (m[t.id] ?? 0), 0);
 }
 function levelOf(total) {
   const lv = Math.min(RANKS.length, Math.floor(total / PER_LEVEL) + 1);
