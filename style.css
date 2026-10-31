@@ -564,7 +564,7 @@ details[open] summary::before { content: "▼ "; }
 .confetti i:nth-child(3n) { width: 6px; height: 12px; }
 @keyframes confetti {
   85% { opacity: 1; }
-  to { transform: translateY(105vh) rotate(540deg); opacity: 0; }
+  to { transform: translateY(calc(var(--fall, 100vh) + 24px)) rotate(540deg); opacity: 0; }
 }
 
 @media (min-width: 420px) { .grid { gap: 12px; } }

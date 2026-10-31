@@ -124,6 +124,7 @@ function toast(hit) {
   t.className = "toast " + (hit ? "good" : "bad");
   t.innerHTML = hit ? `${heartSvg(true)} +1` : "MISS";
   t.hidden = false;
+  fitOverlays();
   clearTimeout(toast.timer);
   toast.timer = setTimeout(() => (t.hidden = true), 750);
 }
@@ -342,8 +343,8 @@ function renderCommute() {
   try { localStorage.setItem(COMMUTE_KEY, String(got)); } catch { /* 저장이 막혀 있어도 앱은 그대로 돈다 */ }
 }
 
-/* 축하 창을 지금 눈에 보이는 화면에 딱 맞춘다 — 폰 브라우저는 가끔 position: fixed 의 기준(레이아웃 뷰포트)을
-   실제 화면보다 넓거나 짧게 잡아서, inset: 0 만으로는 창이 옆으로 밀리고 꽃가루가 화면 중간에 쌓인다 */
+/* 축하 창 · «♥ +1» 을 지금 눈에 보이는 화면에 맞춘다 — 폰 브라우저는 가끔 position: fixed 의 기준(레이아웃 뷰포트)을
+   실제 화면보다 넓거나 짧게 잡아서, inset: 0 · left: 50% 만으로는 창이 옆으로 밀리고 꽃가루가 화면 중간에 쌓인다 */
 function fitOverlays() {
   const v = window.visualViewport;
   if (!v) return;
@@ -351,6 +352,8 @@ function fitOverlays() {
     left: `${v.offsetLeft}px`, top: `${v.offsetTop}px`, right: "auto", bottom: "auto",
     width: `${v.width}px`, height: `${v.height}px`,
   }));
+  document.documentElement.style.setProperty("--fall", `${v.height}px`);   // 꽃가루가 창 바닥까지 떨어지게
+  Object.assign($("toast").style, { left: `${v.offsetLeft + v.width / 2}px`, top: `${v.offsetTop + v.height * .38}px` });
 }
 window.visualViewport?.addEventListener("resize", fitOverlays);
 window.visualViewport?.addEventListener("scroll", fitOverlays);
