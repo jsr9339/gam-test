@@ -40,7 +40,8 @@ html, body {
   margin: 0;
   background: linear-gradient(180deg, var(--sky1) 0, var(--sky2) 70vh) fixed, var(--sky2);
   color: var(--ink);
-  font-family: var(--pixel);
+  /* 읽는 글은 고딕(Pretendard), 장식 글씨(큰 제목 · 등급 · 직급 · STAGE · 점수)만 픽셀 — 가독성 피드백 반영 */
+  font-family: var(--read);
   font-size: 15px;
   line-height: 1.6;
   min-height: 100dvh;
@@ -115,7 +116,7 @@ body { display: flex; flex-direction: column; overflow-x: hidden; }
 @keyframes in { from { opacity: 0; transform: translateY(8px) } to { opacity: 1 } }
 
 h1 { margin: 0; }
-h2 { font-size: 19px; line-height: 1.5; margin: 0 0 18px; }
+h2 { font-size: 19px; font-weight: 800; letter-spacing: -.02em; line-height: 1.5; margin: 0 0 18px; }
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
 .fineprint { font-size: 12px; color: var(--ink); opacity: .75; text-align: center; margin-top: 16px; }
@@ -140,7 +141,7 @@ h2 { font-size: 19px; line-height: 1.5; margin: 0 0 18px; }
   white-space: nowrap; text-shadow: 2px 2px 0 #000;
 }
 .hud-mid { flex: 1; min-width: 0; display: grid; gap: 4px; }
-.hud-title { font-size: 12px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hud-title { font-family: var(--pixel); font-size: 12px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .xp {
   height: 10px; background: #1b1f40; border: 2px solid #000;
   display: block; position: relative;
@@ -215,7 +216,7 @@ svg.hp.off { opacity: .55; }
 }
 .stn i { display: block; width: 14px; height: 14px; background: #fff; border: 3px solid var(--ink); }
 .stn.passed i { background: var(--yellow); }
-.stn b { font-family: var(--pixel); font-size: 11px; font-weight: 400; color: var(--muted); white-space: nowrap; }
+.stn b { font-size: 11.5px; font-weight: 600; color: var(--muted); white-space: nowrap; }
 .stn.passed b { color: var(--ink); }
 .stn svg { width: 22px; height: 22px; margin-top: -8px; }
 .rider {
@@ -237,7 +238,7 @@ svg.hp.off { opacity: .55; }
 .tcard.done { background: #fffbd0; }
 .tstage { font-family: var(--arcade); font-size: 8px; color: var(--muted); }
 .temoji { font-size: 24px; line-height: 1.1; }
-.ttitle { font-size: 14px; font-weight: 700; line-height: 1.4; white-space: pre-line; }
+.ttitle { font-size: 15px; font-weight: 800; letter-spacing: -.01em; line-height: 1.4; white-space: pre-line; }
 .tstart {
   display: block; margin-top: auto; padding: 7px 0; text-align: center;
   font-family: var(--arcade); font-size: 9px; color: #fff;
@@ -274,7 +275,7 @@ button {
   width: 100%; padding: 15px; cursor: pointer; color: var(--ink);
 }
 .primary {
-  background: var(--yellow); font-size: 16px;
+  background: var(--yellow); font-size: 16px; font-weight: 800;
   box-shadow: inset 0 calc(var(--px) * -1.5) 0 var(--orange), inset 0 var(--px) 0 #fff59a;
 }
 .primary:active { transform: translateY(3px); box-shadow: inset 0 var(--px) 0 var(--orange); }
@@ -307,7 +308,7 @@ button {
 
 .choices { display: grid; gap: 9px; margin-bottom: 14px; }
 .choice {
-  background: #fff; padding: 13px 14px; text-align: left; font-size: 15px;
+  background: #fff; padding: 13px 14px; text-align: left; font-size: 15px; font-weight: 600;
   border-width: 3px;
   box-shadow: inset 0 -3px 0 var(--panel-edge);
 }
@@ -383,7 +384,7 @@ input[type=range]::-moz-range-thumb {
   text-shadow: 4px 4px 0 #000;
 }
 .score span { font-family: var(--pixel); font-size: 18px; text-shadow: none; margin-left: 4px; }
-.grade { font-size: 17px; font-weight: 700; color: var(--yellow); margin-top: 2px; }
+.grade { font-family: var(--pixel); font-size: 17px; font-weight: 700; color: var(--yellow); margin-top: 2px; }
 .heart-gain { margin-top: 12px; display: grid; gap: 6px; justify-items: center; }
 .hg-row { display: flex; gap: 6px; }
 .hg-row svg.hp { width: 30px; height: 27px; }
@@ -396,10 +397,10 @@ input[type=range]::-moz-range-thumb {
   background: var(--panel); padding: 15px 14px 12px; margin-bottom: 12px;
   box-shadow: inset calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--panel-edge);
 }
-.card h3 { display: flex; gap: 8px; align-items: flex-start; font-size: 15px; margin: 0 0 8px; line-height: 1.5; }
+.card h3 { display: flex; gap: 8px; align-items: flex-start; font-size: 15px; font-weight: 800; letter-spacing: -.01em; margin: 0 0 8px; line-height: 1.5; }
 .qmark svg.hp { width: 22px; height: 20px; margin-top: 2px; }
 .react {
-  display: inline-block; font-size: 12px; color: var(--ink);
+  display: inline-block; font-size: 12.5px; font-weight: 700; color: var(--ink);
   background: #fff; border: 2px solid var(--ink); padding: 2px 8px; margin: 0 0 12px;
 }
 .react.hit { background: var(--green-lite); }
@@ -476,7 +477,7 @@ details[open] summary::before { content: "▼ "; }
 }
 .lu-lv { font-family: var(--arcade); font-size: 12px; color: var(--ink); }
 .lu-title {
-  display: inline-block; font-size: 20px; font-weight: 700; margin: 10px 0 16px;
+  display: inline-block; font-family: var(--pixel); font-size: 20px; font-weight: 700; margin: 10px 0 16px;
   background: var(--panel); border: 3px solid var(--ink); padding: 6px 14px;
 }
 
