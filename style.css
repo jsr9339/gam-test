@@ -372,14 +372,12 @@ input[type=range]::-moz-range-thumb {
   font-family: var(--arcade); font-size: 14px; color: var(--yellow);
   text-shadow: 3px 3px 0 var(--orange); margin-bottom: 10px;
 }
-/* 등급 픽토그램 — 남색 점수판 위에서 어두운 그림(🎓 등)도 또렷하도록 크림색 픽셀 배지에 담는다 */
+/* 등급 픽토그램 — 남색 점수판 위에서 어두운 그림(🎓 등)도 또렷하도록, 그림 모양을 따라 연노랑 테두리를 두른다 */
 .grade-emoji {
-  display: inline-grid; place-items: center; width: 58px; height: 58px;
-  font-size: 34px; line-height: 1;
-  background: var(--panel); border: 3px solid var(--ink);
-  box-shadow: inset -4px -4px 0 var(--panel-edge), 3px 3px 0 #000;
+  font-size: 38px; line-height: 1.1;
+  filter: drop-shadow(2px 0 0 #fff3a0) drop-shadow(-2px 0 0 #fff3a0)
+          drop-shadow(0 2px 0 #fff3a0) drop-shadow(0 -2px 0 #fff3a0);
 }
-.grade-emoji:empty { display: none; }
 .score {
   font-family: var(--arcade); font-size: 40px; line-height: 1.3; margin-top: 8px;
   text-shadow: 4px 4px 0 #000;
