@@ -361,6 +361,9 @@ details[open] summary::before { content: "▼ "; }
 .caveat b { font-family: var(--pixel); color: var(--red); }
 #source a { color: var(--ink); }
 
+/* 문항 · 해설 · 근거 · 한계의 줄바꿈(\n)은 의미 단위로 넣은 것이라 그대로 살린다 */
+#q-text, .card h3, .why, .basis, .caveat { white-space: pre-line; }
+
 /* ── 레벨 업 ──────────────────────────────────── */
 .levelup {
   position: fixed; inset: 0; z-index: 30;
