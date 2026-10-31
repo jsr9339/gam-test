@@ -118,7 +118,7 @@ body { display: flex; flex-direction: column; overflow-x: hidden; }
 @keyframes rumble { 50% { transform: translateY(-1px); } }
 
 /* 버스 안 — 버스와 똑같이 움직이는 겹을 하나 더 둔다. 창문은 버스 그림(28x14칸, 1칸 3.5px)의 다섯 창.
-   맨 앞 창에는 늘 기사 토끼가 앉아 있고, 탄 두 사람은 두 · 세 번째 창에 탄 뒤(44%)부터 보인다 */
+   맨 앞은 크고 둥근 기사석 창(토끼가 보이게), 탄 두 사람은 두 · 세 번째 창에 탄 뒤(44%)부터 보인다 */
 .bus-riders { position: absolute; z-index: 3; bottom: -46px; left: calc(27% - 77px); width: 98px; height: 49px;
   animation: bus-run 18s infinite, rumble .4s steps(1) infinite; }
 .seat { position: absolute; top: 10px; width: 12px; height: 11px; overflow: hidden; }
@@ -126,9 +126,26 @@ body { display: flex; flex-direction: column; overflow-x: hidden; }
 .seat.s1, .seat.s2 { opacity: 0; animation: riders 18s steps(1) infinite; }
 .seat.s1 { left: 24px; }
 .seat.s2 { left: 38px; }
-.seat.driver { left: 66px; }
-.seat.driver svg { height: 12px; }
 @keyframes riders { 0%, 43% { opacity: 0; } 44%, 100% { opacity: 1; } }
+/* 기사석 — 지붕 위로 살짝 솟은 큰 원 창에 기사 토끼를 크게 담는다 */
+.porthole {
+  position: absolute; left: 54px; top: -12px; width: 34px; height: 34px; border-radius: 50%;
+  background: #bfe8f5; border: 3px solid var(--ink); overflow: hidden;
+  display: grid; place-items: center; box-shadow: inset 0 -3px 0 #8fd0e6;
+}
+.porthole svg { width: 26px; height: 26px; margin-top: 1px; }   /* 귀까지 원 안에 다 보이게 */
+/* «출발~!» — 버스가 정류장에 서 있는 동안(28~50%)만 기사석 위에 뜬다 */
+.depart {
+  position: absolute; left: 50px; top: -33px; padding: 2px 5px; white-space: nowrap;
+  font-size: 10px; font-weight: 800; line-height: 1.2; color: var(--ink);
+  background: #fff; border: 2px solid var(--ink);
+  opacity: 0; animation: depart 18s steps(1) infinite;
+}
+.depart::after {
+  content: ""; position: absolute; left: 14px; bottom: -5px; width: 6px; height: 6px; background: #fff;
+  border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: rotate(45deg);
+}
+@keyframes depart { 0%, 29% { opacity: 0; } 30%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   .cloud, .worker, .bus, .bus-riders, .seat { animation: none; }   /* 버스는 정류장 앞에 서 있고, 사람들은 기다린다 */
