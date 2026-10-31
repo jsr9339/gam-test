@@ -58,13 +58,34 @@ body { display: flex; flex-direction: column; overflow-x: hidden; }
   .cloud.c1 { left: calc(50% - 330px); }
   .cloud.c2 { right: calc(50% - 340px); }
 }
+/* 구름은 저마다 다른 빠르기 · 방향으로 옆으로 흐르며(translate) 살짝 오르내린다(transform) */
+.cloud.c1 { animation: drift-r 11s ease-in-out infinite alternate, bob 4s steps(2) infinite; }
+.cloud.c2 { animation: drift-l 14s ease-in-out infinite alternate, bob 5s steps(2) infinite 1s; }
+.cloud.c3 { animation: drift-r 8s ease-in-out infinite alternate, bob 3.5s steps(2) infinite .5s; }
+@keyframes drift-r { to { translate: 48px 0; } }
+@keyframes drift-l { to { translate: -56px 0; } }
+@keyframes bob { 50% { transform: translateY(-3px); } }
 
 .ground {
+  position: relative;
   margin-top: auto; height: 72px; flex: none;
   background:
     linear-gradient(var(--green-lite) 0 10px, var(--green) 10px 16px, transparent 16px),
     repeating-conic-gradient(var(--dirt) 0 25%, var(--dirt2) 0 50%) 0 16px / 16px 16px;
   border-top: var(--px) solid #2f6b1f;
+}
+/* 땅 위 일하는 사람들 — 화면 가운데 460px 안에서 몇은 오가고, 몇은 제자리에서 들썩인다 */
+.crew { position: absolute; bottom: 100%; left: 50%; width: min(460px, 100%); height: 39px; transform: translateX(-50%); }
+.worker { position: absolute; bottom: -13px; width: 26px; height: 39px; overflow: visible; }
+.worker.w1 { left: 6%;  animation: walk 16s linear infinite alternate, bob .6s steps(1) infinite; }
+.worker.w2 { left: 34%; animation: bob 1.4s steps(1) infinite .3s; }
+.worker.w3 { left: 58%; animation: walk-back 13s linear infinite alternate, bob .6s steps(1) infinite .2s; }
+.worker.w4 { left: 84%; animation: bob 1.8s steps(1) infinite; }
+@keyframes walk { to { translate: 90px 0; } }
+@keyframes walk-back { to { translate: -80px 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud, .worker { animation: none; }
 }
 
 #app {
