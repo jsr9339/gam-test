@@ -184,11 +184,13 @@ svg.hp.off { opacity: .55; }
   display: flex; align-items: center; justify-content: center; gap: 6px;
   font-size: 13px; color: var(--ink); margin: 10px 0 0;
 }
-.coin { width: 16px; height: 16px; flex: none; animation: spin 1s steps(4) infinite; }
+.lead-heart { width: 18px; height: 16px; flex: none; animation: spin 1s steps(4) infinite; }   /* 빙글 도는 하트 */
 @keyframes spin { 50% { transform: scaleX(.3) } }
-.tree { position: absolute; top: 12px; width: 30px; height: 35px; opacity: .9; }
-.tree.t-left { left: 10px; }
-.tree.t-right { right: 10px; }
+/* 굿모닝 해 — 양쪽 위에서 햇살이 천천히 돈다 */
+.sun { position: absolute; top: 8px; width: 38px; height: 38px; animation: shine 6s steps(12) infinite linear; }
+.sun.s-left { left: 8px; }
+.sun.s-right { right: 8px; }
+@keyframes shine { to { transform: rotate(360deg); } }
 
 .banner { background: var(--panel); padding: 12px 14px; font-size: 14px; margin: 0 0 12px; }
 .banner b { color: var(--red); }
