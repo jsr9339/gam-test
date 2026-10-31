@@ -195,20 +195,19 @@ function renderGrid() {
   renderCommute();
 }
 
-/* ── 출근길 노선도 — 맞힌 문제(하트) 하나에 한 걸음씩 집에서 회사로 ── */
+/* ── 출근길 노선도 — 스테이지 하나를 끝낼 때마다 한 정거장씩 집에서 회사로 ── */
 const STOPS = ["집", "연차", "퇴직", "수당", "안전", "보험", "회사"];
-const COMMUTE_KEY = "gam-test-commute";
+const COMMUTE_KEY = "gam-test-commute-stage";      // 지난번 자리(끝낸 스테이지 수) — 하트로 세던 예전 값과 섞이지 않게 새 이름
 
 function renderCommute() {
-  const max = INDEX.topics.length * 5;
-  const got = Math.min(totalHearts(), max);
+  const done = doneMap();
+  const max = INDEX.topics.length;
+  const got = INDEX.topics.filter((t) => t.id in done).length;
   const at = (n) => (n / max) * 100;
   let prev = got;                                   // 지난번에 서 있던 자리 — 거기서 걸어온다
   try { prev = Math.min(Number(localStorage.getItem(COMMUTE_KEY) ?? got), got); } catch { /* 저장이 막혀 있으면 걷지 않는다 */ }
 
-  // 남은 거리는 스테이지 하나를 한 정거장으로 센다 — 아직 끝내지 않은 스테이지 수
-  const done = doneMap();
-  const left = INDEX.topics.filter((t) => !(t.id in done)).length;
+  const left = max - got;                           // 남은 정거장 = 아직 끝내지 않은 스테이지 수
   $("commute-note").textContent = left ? `회사까지 ${left}정거장` : "출근 완료!";
   $("metro").setAttribute("aria-label", `출근길 ${got} / ${max}`);
   $("metro").innerHTML =
