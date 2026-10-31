@@ -20,7 +20,7 @@
   --px: 4px;
   --pixel: "Galmuri11", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --arcade: "Press Start 2P", "Galmuri11", monospace;
-  --read: Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+  --read: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
           "Malgun Gothic", sans-serif;
   /* 네 모서리를 한 칸씩 깎은 픽셀 상자 */
   --corner: polygon(0 var(--px), var(--px) var(--px), var(--px) 0,
