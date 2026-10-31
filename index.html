@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<!-- 픽셀 그림 — 하트 · 빈 하트 · 구름 · 해 · 별(정답) · 직장인(내 답) · 땅 위 일하는 사람들 · 버스 · 정류장 · 집 · 회사(노선도) · 웃는 얼굴. 1칸 = 1px, 확대해도 각지게 -->
+<!-- 픽셀 그림 — 하트 · 빈 하트 · 구름 · 별(정답) · 직장인(내 답) · 땅 위 일하는 사람들 · 버스 · 정류장 · 집 · 회사(노선도) · 웃는 얼굴. 1칸 = 1px, 확대해도 각지게 -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="px-heart" viewBox="0 0 9 8" shape-rendering="crispEdges">
@@ -117,13 +117,6 @@
       <path fill="#ffffff" d="M4 1h5v1H4zM2 2h9v1H2zM2 3h9v1H2zM1 4h2v1H1zM4 4h5v1H4zM10 4h2v1H10zM1 5h1v1H1zM3 5h1v1H3zM5 5h3v1H5zM9 5h1v1H9zM11 5h1v1H11zM1 6h1v1H1zM3 6h7v1H3zM11 6h1v1H11zM1 7h3v1H1zM5 7h3v1H5zM9 7h3v1H9zM2 8h3v1H2zM8 8h3v1H8zM2 9h9v1H2zM4 10h5v1H4z"/>
       <path fill="#ff9aa2" d="M2 6h1v1H2zM10 6h1v1H10z"/>
     </symbol>
-    <symbol id="px-sun" viewBox="0 0 19 19" shape-rendering="crispEdges">
-      <path fill="#f28a2b" d="M9 0h1v1H9zM9 1h1v1H9zM2 2h1v1H2zM9 2h1v1H9zM16 2h1v1H16zM3 3h1v1H3zM15 3h1v1H15zM0 9h3v1H0zM16 9h3v1H16zM3 15h1v1H3zM15 15h1v1H15zM2 16h1v1H2zM9 16h1v1H9zM16 16h1v1H16zM9 17h1v1H9zM9 18h1v1H9z"/>
-      <path fill="#2b1a14" d="M7 4h5v1H7zM6 5h1v1H6zM12 5h1v1H12zM5 6h1v1H5zM13 6h1v1H13zM4 7h1v1H4zM14 7h1v1H14zM4 8h1v1H4zM14 8h1v1H14zM4 9h1v1H4zM14 9h1v1H14zM4 10h1v1H4zM14 10h1v1H14zM4 11h1v1H4zM14 11h1v1H14zM5 12h1v1H5zM13 12h1v1H13zM6 13h1v1H6zM12 13h1v1H12zM7 14h5v1H7z"/>
-      <path fill="#f2a52b" d="M13 9h1v1H13zM12 10h2v1H12zM11 11h3v1H11zM10 12h3v1H10zM9 13h3v1H9z"/>
-      <path fill="#ffd23f" d="M7 5h5v1H7zM6 6h1v1H6zM8 6h5v1H8zM5 7h1v1H5zM9 7h5v1H9zM5 8h2v1H5zM8 8h6v1H8zM5 9h8v1H5zM5 10h7v1H5zM5 11h6v1H5zM6 12h4v1H6zM7 13h2v1H7z"/>
-      <path fill="#fff3a0" d="M7 6h1v1H7zM6 7h3v1H6zM7 8h1v1H7z"/>
-    </symbol>
   </defs>
 </svg>
 
@@ -149,8 +142,9 @@
   <section id="view-home" class="view">
     <p id="shared-banner" class="banner" hidden></p>
     <div class="hero">
-      <svg class="sun s-left" aria-hidden="true"><use href="#px-sun"/></svg>
-      <svg class="sun s-right" aria-hidden="true"><use href="#px-sun"/></svg>
+      <!-- 굿모닝 해 — 햇살 두 벌(.ray-a 가로세로 · .ray-b 대각선)이 번갈아 켜져 반짝인다. 따로 움직이게 인라인으로 둔다 -->
+      <svg class="sun s-left" viewBox="0 0 23 23" shape-rendering="crispEdges" aria-hidden="true"><g class="ray-a"><path fill="#2b1a14" d="M10 0h3v1H10zM9 1h1v1H9zM13 1h1v1H13zM9 2h1v1H9zM13 2h1v1H13zM9 3h1v1H9zM13 3h1v1H13zM10 4h3v1H10zM1 9h3v1H1zM19 9h3v1H19zM0 10h1v1H0zM4 10h1v1H4zM18 10h1v1H18zM22 10h1v1H22zM0 11h1v1H0zM4 11h1v1H4zM18 11h1v1H18zM22 11h1v1H22zM0 12h1v1H0zM4 12h1v1H4zM18 12h1v1H18zM22 12h1v1H22zM1 13h3v1H1zM19 13h3v1H19zM10 18h3v1H10zM9 19h1v1H9zM13 19h1v1H13zM9 20h1v1H9zM13 20h1v1H13zM9 21h1v1H9zM13 21h1v1H13zM10 22h3v1H10z"/><path fill="#ff8a1f" d="M10 1h3v1H10zM10 2h3v1H10zM10 3h3v1H10zM1 10h3v1H1zM19 10h3v1H19zM1 11h3v1H1zM19 11h3v1H19zM1 12h3v1H1zM19 12h3v1H19zM10 19h3v1H10zM10 20h3v1H10zM10 21h3v1H10z"/></g><g class="ray-b"><path fill="#2b1a14" d="M3 2h2v1H3zM18 2h2v1H18zM2 3h1v1H2zM5 3h1v1H5zM17 3h1v1H17zM20 3h1v1H20zM2 4h1v1H2zM6 4h1v1H6zM16 4h1v1H16zM20 4h1v1H20zM3 5h1v1H3zM5 5h1v1H5zM17 5h1v1H17zM19 5h1v1H19zM4 6h1v1H4zM18 6h1v1H18zM4 16h1v1H4zM18 16h1v1H18zM3 17h1v1H3zM5 17h1v1H5zM17 17h1v1H17zM19 17h1v1H19zM2 18h1v1H2zM6 18h1v1H6zM16 18h1v1H16zM20 18h1v1H20zM2 19h1v1H2zM5 19h1v1H5zM17 19h1v1H17zM20 19h1v1H20zM3 20h2v1H3zM18 20h2v1H18z"/><path fill="#ff8a1f" d="M3 3h2v1H3zM18 3h2v1H18zM3 4h3v1H3zM17 4h3v1H17zM4 5h1v1H4zM18 5h1v1H18zM4 17h1v1H4zM18 17h1v1H18zM3 18h3v1H3zM17 18h3v1H17zM3 19h2v1H3zM18 19h2v1H18z"/></g><g><path fill="#2b1a14" d="M9 6h5v1H9zM8 7h1v1H8zM14 7h1v1H14zM7 8h1v1H7zM15 8h1v1H15zM6 9h1v1H6zM16 9h1v1H16zM6 10h1v1H6zM16 10h1v1H16zM6 11h1v1H6zM16 11h1v1H16zM6 12h1v1H6zM16 12h1v1H16zM6 13h1v1H6zM16 13h1v1H16zM7 14h1v1H7zM15 14h1v1H15zM8 15h1v1H8zM14 15h1v1H14zM9 16h5v1H9z"/><path fill="#f2a52b" d="M15 11h1v1H15zM14 12h2v1H14zM13 13h3v1H13zM12 14h3v1H12zM11 15h3v1H11z"/><path fill="#ffd23f" d="M9 7h5v1H9zM8 8h1v1H8zM10 8h5v1H10zM7 9h1v1H7zM11 9h5v1H11zM7 10h2v1H7zM10 10h6v1H10zM7 11h8v1H7zM7 12h7v1H7zM7 13h6v1H7zM8 14h4v1H8zM9 15h2v1H9z"/><path fill="#fff3a0" d="M9 8h1v1H9zM8 9h3v1H8zM9 10h1v1H9z"/></g></svg>
+      <svg class="sun s-right" viewBox="0 0 23 23" shape-rendering="crispEdges" aria-hidden="true"><g class="ray-a"><path fill="#2b1a14" d="M10 0h3v1H10zM9 1h1v1H9zM13 1h1v1H13zM9 2h1v1H9zM13 2h1v1H13zM9 3h1v1H9zM13 3h1v1H13zM10 4h3v1H10zM1 9h3v1H1zM19 9h3v1H19zM0 10h1v1H0zM4 10h1v1H4zM18 10h1v1H18zM22 10h1v1H22zM0 11h1v1H0zM4 11h1v1H4zM18 11h1v1H18zM22 11h1v1H22zM0 12h1v1H0zM4 12h1v1H4zM18 12h1v1H18zM22 12h1v1H22zM1 13h3v1H1zM19 13h3v1H19zM10 18h3v1H10zM9 19h1v1H9zM13 19h1v1H13zM9 20h1v1H9zM13 20h1v1H13zM9 21h1v1H9zM13 21h1v1H13zM10 22h3v1H10z"/><path fill="#ff8a1f" d="M10 1h3v1H10zM10 2h3v1H10zM10 3h3v1H10zM1 10h3v1H1zM19 10h3v1H19zM1 11h3v1H1zM19 11h3v1H19zM1 12h3v1H1zM19 12h3v1H19zM10 19h3v1H10zM10 20h3v1H10zM10 21h3v1H10z"/></g><g class="ray-b"><path fill="#2b1a14" d="M3 2h2v1H3zM18 2h2v1H18zM2 3h1v1H2zM5 3h1v1H5zM17 3h1v1H17zM20 3h1v1H20zM2 4h1v1H2zM6 4h1v1H6zM16 4h1v1H16zM20 4h1v1H20zM3 5h1v1H3zM5 5h1v1H5zM17 5h1v1H17zM19 5h1v1H19zM4 6h1v1H4zM18 6h1v1H18zM4 16h1v1H4zM18 16h1v1H18zM3 17h1v1H3zM5 17h1v1H5zM17 17h1v1H17zM19 17h1v1H19zM2 18h1v1H2zM6 18h1v1H6zM16 18h1v1H16zM20 18h1v1H20zM2 19h1v1H2zM5 19h1v1H5zM17 19h1v1H17zM20 19h1v1H20zM3 20h2v1H3zM18 20h2v1H18z"/><path fill="#ff8a1f" d="M3 3h2v1H3zM18 3h2v1H18zM3 4h3v1H3zM17 4h3v1H17zM4 5h1v1H4zM18 5h1v1H18zM4 17h1v1H4zM18 17h1v1H18zM3 18h3v1H3zM17 18h3v1H17zM3 19h2v1H3zM18 19h2v1H18z"/></g><g><path fill="#2b1a14" d="M9 6h5v1H9zM8 7h1v1H8zM14 7h1v1H14zM7 8h1v1H7zM15 8h1v1H15zM6 9h1v1H6zM16 9h1v1H16zM6 10h1v1H6zM16 10h1v1H16zM6 11h1v1H6zM16 11h1v1H16zM6 12h1v1H6zM16 12h1v1H16zM6 13h1v1H6zM16 13h1v1H16zM7 14h1v1H7zM15 14h1v1H15zM8 15h1v1H8zM14 15h1v1H14zM9 16h5v1H9z"/><path fill="#f2a52b" d="M15 11h1v1H15zM14 12h2v1H14zM13 13h3v1H13zM12 14h3v1H12zM11 15h3v1H11z"/><path fill="#ffd23f" d="M9 7h5v1H9zM8 8h1v1H8zM10 8h5v1H10zM7 9h1v1H7zM11 9h5v1H11zM7 10h2v1H7zM10 10h6v1H10zM7 11h8v1H7zM7 12h7v1H7zM7 13h6v1H7zM8 14h4v1H8zM9 15h2v1H9z"/><path fill="#fff3a0" d="M9 8h1v1H9zM8 9h3v1H8zM9 10h1v1H9z"/></g></svg>
       <div class="badge-day">PRESS START</div>
       <h1 id="title">굿모닝 노동법!</h1>
       <p id="subtitle" class="muted"></p>
