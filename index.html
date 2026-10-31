@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<!-- 픽셀 그림 — 하트 · 빈 하트 · 동전 · 구름 · 나무 · 별(정답) · 직장인(내 답) · 땅 위 일하는 사람들 · 버스 · 정류장 · 집 · 회사(노선도). 1칸 = 1px, 확대해도 각지게 -->
+<!-- 픽셀 그림 — 하트 · 빈 하트 · 동전 · 구름 · 나무 · 별(정답) · 직장인(내 답) · 땅 위 일하는 사람들 · 버스 · 정류장 · 집 · 회사(노선도) · 웃는 얼굴. 1칸 = 1px, 확대해도 각지게 -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="px-heart" viewBox="0 0 9 8" shape-rendering="crispEdges">
@@ -122,6 +122,11 @@
       <path fill="#ffe98a" d="M2 2h1v1H2zM4 2h1v1H4zM6 2h1v1H6zM8 2h1v1H8zM2 4h1v1H2zM4 4h1v1H4zM6 4h1v1H6zM8 4h1v1H8zM2 6h1v1H2zM4 6h1v1H4zM6 6h1v1H6zM8 6h1v1H8zM2 8h1v1H2zM8 8h1v1H8z"/>
       <path fill="#55627d" d="M3 2h1v1H3zM5 2h1v1H5zM7 2h1v1H7zM3 4h1v1H3zM5 4h1v1H5zM7 4h1v1H7zM3 6h1v1H3zM5 6h1v1H5zM7 6h1v1H7zM3 8h1v1H3zM7 8h1v1H7zM3 9h1v1H3zM7 9h1v1H7z"/>
       <path fill="#2b3a6b" d="M4 8h3v1H4zM4 9h3v1H4z"/>
+    </symbol>
+    <symbol id="px-smile" viewBox="0 0 13 12" shape-rendering="crispEdges">
+      <path fill="#2b1a14" d="M4 0h5v1H4zM2 1h2v1H2zM9 1h2v1H9zM1 2h1v1H1zM11 2h1v1H11zM1 3h1v1H1zM11 3h1v1H11zM0 4h1v1H0zM3 4h1v1H3zM9 4h1v1H9zM12 4h1v1H12zM0 5h1v1H0zM2 5h1v1H2zM4 5h1v1H4zM8 5h1v1H8zM10 5h1v1H10zM12 5h1v1H12zM0 6h1v1H0zM12 6h1v1H12zM0 7h1v1H0zM4 7h1v1H4zM8 7h1v1H8zM12 7h1v1H12zM1 8h1v1H1zM5 8h3v1H5zM11 8h1v1H11zM1 9h1v1H1zM11 9h1v1H11zM2 10h2v1H2zM9 10h2v1H9zM4 11h5v1H4z"/>
+      <path fill="#ffffff" d="M4 1h5v1H4zM2 2h9v1H2zM2 3h9v1H2zM1 4h2v1H1zM4 4h5v1H4zM10 4h2v1H10zM1 5h1v1H1zM3 5h1v1H3zM5 5h3v1H5zM9 5h1v1H9zM11 5h1v1H11zM1 6h1v1H1zM3 6h7v1H3zM11 6h1v1H11zM1 7h3v1H1zM5 7h3v1H5zM9 7h3v1H9zM2 8h3v1H2zM8 8h3v1H8zM2 9h9v1H2zM4 10h5v1H4z"/>
+      <path fill="#ff9aa2" d="M2 6h1v1H2zM10 6h1v1H10z"/>
     </symbol>
   </defs>
 </svg>
@@ -241,7 +246,7 @@
     <svg class="arrive-office" aria-hidden="true"><use href="#px-office"/></svg>
     <div class="lu-big">출근<br>완료!</div>
     <div class="lu-sub">12정거장을 모두 지나 회사에 도착했어요</div>
-    <button id="arrive-ok" class="primary">오늘도 빛나는 하루 되세요! <svg class="btn-star" aria-hidden="true"><use href="#px-star"/></svg></button>
+    <button id="arrive-ok" class="primary">오늘도 빛나는 하루 되세요! <svg class="btn-smile" aria-hidden="true"><use href="#px-smile"/></svg></button>
   </div>
 </div>
 

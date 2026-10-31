@@ -462,9 +462,9 @@ details[open] summary::before { content: "▼ "; }
 .arrive .lu-big { font-family: var(--pixel); font-weight: 700; font-size: 40px; line-height: 1.2; }
 .arrive .lu-sub { margin-bottom: 16px; }
 .arrive-office { display: block; width: 66px; height: 66px; margin: 0 auto; }
-/* «오늘도 빛나는 하루» 옆 반짝이는 별 — 화살표 대신 기분 좋아지라고 */
-.btn-star { width: 22px; height: 20px; vertical-align: -4px; margin-left: 4px; animation: twinkle 1s steps(2) infinite; }
-@keyframes twinkle { 50% { transform: scale(1.25) rotate(15deg); } }
+/* «오늘도 빛나는 하루» 옆 웃는 얼굴 — 화살표 대신 보고 기분 좋아지라고, 통통 뛴다 */
+.btn-smile { width: 26px; height: 24px; vertical-align: -6px; margin-left: 4px; animation: hop .8s steps(2) infinite; }
+@keyframes hop { 50% { transform: translateY(-3px); } }
 .confetti { position: absolute; inset: 0; z-index: 2; pointer-events: none; }        /* 창 앞으로 쏟아지게 */
 .confetti i {
   position: absolute; top: -12px; width: 8px; height: 8px; box-shadow: 2px 2px 0 rgba(0, 0, 0, .25);
