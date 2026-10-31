@@ -331,15 +331,13 @@ input[type=range]::-moz-range-thumb {
 .pill.mine { border-color: var(--ink); background: #ffb3a8; color: var(--ink); }
 .pill.both { border-color: var(--ink); background: var(--yellow); color: var(--ink); font-weight: 700; }
 
-/* 슬라이더 결과 — 손잡이가 정답으로 움직입니다 */
-.track { position: relative; height: 30px; margin: 0 0 10px; }
-.track .line { position: absolute; top: 12px; left: 0; right: 0; height: 6px; background: var(--ink); }
-.track .ghost, .track .live {
-  position: absolute; top: 6px; width: 18px; height: 18px; padding: 0;
-  transform: translateX(-9px); border: 3px solid var(--ink); clip-path: none;
-}
-.track .ghost { background: #fff; box-shadow: none; }
-.track .live { background: var(--green-lite); transition: left 1s steps(10); }
+/* 슬라이더 결과 — 내 답 자리에 직장인이 서 있고, 별이 정답으로 날아갑니다 */
+.track { position: relative; height: 42px; margin: 0 0 10px; }
+.track .line { position: absolute; top: 30px; left: 0; right: 0; height: 6px; background: var(--ink); }
+.track .ghost, .track .live { position: absolute; overflow: visible; }
+.track .ghost { top: 0; width: 20px; height: 30px; transform: translateX(-10px); }      /* 발이 선 위에 닿게 */
+.track .live { top: 22px; width: 24px; height: 22px; transform: translateX(-12px); z-index: 1;
+  transition: left 1s steps(10); }                                                       /* 선 한가운데 */
 
 /* 근거 · 해설 */
 .why {

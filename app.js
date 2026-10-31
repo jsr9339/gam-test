@@ -348,8 +348,8 @@ function sliderBody(q, mine) {
   return `
     <div class="track">
       <span class="line"></span>
-      <span class="ghost" style="left:${pos(q, mine)}%"></span>
-      <span class="live" data-left="${pos(q, q.answer)}" style="left:${pos(q, mine)}%"></span>
+      <svg class="ghost" style="left:${pos(q, mine)}%" aria-label="내 답"><use href="#px-me"/></svg>
+      <svg class="live" data-left="${pos(q, q.answer)}" style="left:${pos(q, mine)}%" aria-label="실제"><use href="#px-star"/></svg>
     </div>
     <div class="rows">${bars}</div>`;
 }

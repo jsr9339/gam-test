@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<!-- 픽셀 그림 — 하트 · 빈 하트 · 동전 · 구름 · 나무. 1칸 = 1px, 확대해도 각지게 -->
+<!-- 픽셀 그림 — 하트 · 빈 하트 · 동전 · 구름 · 나무 · 별(정답) · 직장인(내 답). 1칸 = 1px, 확대해도 각지게 -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="px-heart" viewBox="0 0 9 8" shape-rendering="crispEdges">
@@ -40,6 +40,20 @@
       <path fill="#5aae2e" d="M3 1h5v1H3zM1 2h9v5H1zM2 7h7v1H2z"/>
       <path fill="#8fd14f" d="M3 2h3v1H3zM2 3h2v2H2z"/>
       <path fill="#7a4a2a" d="M5 9h2v5H5z"/>
+    </symbol>
+    <symbol id="px-star" viewBox="0 0 11 10" shape-rendering="crispEdges">
+      <path fill="#2b1a14" d="M5 0h1v1H5zM4 1h1v1H4zM6 1h1v1H6zM1 2h3v1H1zM7 2h3v1H7zM0 3h1v1H0zM10 3h1v1H10zM1 4h1v1H1zM9 4h1v1H9zM2 5h1v1H2zM8 5h1v1H8zM2 6h1v1H2zM8 6h1v1H8zM1 7h1v1H1zM5 7h1v1H5zM9 7h1v1H9zM1 8h1v1H1zM4 8h1v1H4zM6 8h1v1H6zM9 8h1v1H9zM2 9h2v1H2zM7 9h2v1H7z"/>
+      <path fill="#fff3a0" d="M5 1h1v1H5zM4 2h1v1H4zM2 3h2v1H2zM3 4h1v1H3z"/>
+      <path fill="#ffd23f" d="M5 2h1v1H5zM1 3h1v1H1zM4 3h4v1H4zM2 4h1v1H2zM4 4h4v1H4zM3 5h4v1H3zM3 6h4v1H3zM2 7h2v1H2zM6 7h2v1H6zM2 8h1v1H2zM7 8h1v1H7z"/>
+      <path fill="#f2a52b" d="M6 2h1v1H6zM8 3h2v1H8zM8 4h1v1H8zM7 5h1v1H7zM7 6h1v1H7zM4 7h1v1H4zM8 7h1v1H8zM3 8h1v1H3zM8 8h1v1H8z"/>
+    </symbol>
+    <symbol id="px-me" viewBox="0 0 10 15" shape-rendering="crispEdges">
+      <path fill="#2b1a14" d="M3 0h4v1H3zM2 1h1v1H2zM7 1h1v1H7zM1 2h1v1H1zM8 2h1v1H8zM1 3h1v1H1zM8 3h1v1H8zM1 4h1v1H1zM3 4h1v1H3zM6 4h1v1H6zM8 4h1v1H8zM1 5h1v1H1zM8 5h1v1H8zM2 6h1v1H2zM7 6h1v1H7zM1 7h1v1H1zM8 7h1v1H8zM0 8h1v1H0zM9 8h1v1H9zM0 9h1v1H0zM2 9h1v1H2zM7 9h1v1H7zM9 9h1v1H9zM1 10h2v1H1zM7 10h2v1H7zM2 11h1v1H2zM7 11h1v1H7zM2 12h1v1H2zM4 12h2v1H4zM7 12h1v1H7zM1 13h8v1H1zM2 14h2v1H2zM6 14h2v1H6z"/>
+      <path fill="#3a2418" d="M3 1h4v1H3zM2 2h6v1H2zM2 3h1v1H2zM7 3h1v1H7z"/>
+      <path fill="#f5c9a0" d="M3 3h4v1H3zM2 4h1v1H2zM4 4h2v1H4zM7 4h1v1H7zM2 5h6v1H2zM3 6h4v1H3zM1 8h1v1H1zM8 8h1v1H8zM1 9h1v1H1zM8 9h1v1H8z"/>
+      <path fill="#ffffff" d="M2 7h2v1H2zM6 7h2v1H6zM2 8h2v1H2zM6 8h2v1H6zM3 9h1v1H3zM6 9h1v1H6z"/>
+      <path fill="#e8352e" d="M4 7h2v1H4zM4 8h2v1H4zM4 9h2v1H4z"/>
+      <path fill="#2b3a6b" d="M3 10h4v1H3zM3 11h4v1H3zM3 12h1v1H3zM6 12h1v1H6z"/>
     </symbol>
   </defs>
 </svg>
