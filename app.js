@@ -310,12 +310,18 @@ function renderSound() {
 }
 
 /* ── 출근길 노선도 — 스테이지 하나를 끝낼 때마다 한 정거장씩 집에서 회사로 ── */
-const STOPS = ["집", "연차", "퇴직", "수당", "안전", "보험", "회사"];
+const STOPS = ["집", "근로", "월급", "휴가", "보험", "노무", "퇴사"];
+const STOP_END = [0, 2, 3, 5, 8, 11, 12];            // 각 정거장에 닿는 스테이지 수 — 근로 1~2 · 월급 3 · 휴가 4~5 · 보험 6~8 · 노무 9~11 · 퇴사 12
 const COMMUTE_KEY = "gam-test-commute-stage";      // 지난번 자리(끝낸 스테이지 수) — 하트로 세던 예전 값과 섞이지 않게 새 이름
 
 function renderCommute() {
   const { max, got, left } = commute();
-  const at = (n) => (n / max) * 100;
+  // 정거장은 같은 간격 — 스테이지 수가 정거장 사이에 있으면 그만큼만 걸어간다
+  const at = (n) => {
+    const j = Math.max(1, STOP_END.findIndex((e) => n <= e));
+    const f = (Math.min(n, STOP_END[j]) - STOP_END[j - 1]) / (STOP_END[j] - STOP_END[j - 1]);
+    return ((j - 1 + f) / (STOPS.length - 1)) * 100;
+  };
   let prev = got;                                   // 지난번에 서 있던 자리 — 거기서 걸어온다
   try { prev = Math.min(Number(localStorage.getItem(COMMUTE_KEY) ?? got), got); } catch { /* 저장이 막혀 있으면 걷지 않는다 */ }
 
