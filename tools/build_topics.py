@@ -35,6 +35,12 @@ OUT = APP / "topics"
 
 TOPICS: list[dict] = []
 
+# 화면에 나오는 스테이지 순서 — app.js 의 노선도 묶음(STOP_END)이 이 순서를 따른다
+# 근로 1~2 · 월급 3 · 휴가 4~5 · 보험 6~8 · 노무 9~11 · 퇴사 12
+ORDER = ["labor-contract", "labor-hours", "labor-wage", "labor-leave", "labor-family",
+         "ins-employ", "ins-pension", "ins-health",
+         "labor-bully", "labor-safety", "labor-dismiss", "labor-retire"]
+
 
 def load_json(name):
     return json.load(io.open(RAW / name, encoding="utf-8"))
@@ -760,6 +766,8 @@ def write_labor():
     예전 11주제의 topics/*.json 은 지우지도 다시 계산하지도 않는다. 목록에서만 내린다.
     """
     build_labor()
+    assert sorted(t["id"] for t in TOPICS) == sorted(ORDER), "ORDER 와 주제 목록이 다릅니다"
+    TOPICS.sort(key=lambda t: ORDER.index(t["id"]))
     OUT.mkdir(parents=True, exist_ok=True)
     for t in TOPICS:
         assert len(t["questions"]) == 5, f"{t['id']}: 문항이 5개가 아닙니다"
