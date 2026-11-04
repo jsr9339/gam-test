@@ -36,7 +36,7 @@ OUT = APP / "topics"
 TOPICS: list[dict] = []
 
 # 화면에 나오는 스테이지 순서 — app.js 의 노선도 묶음(STOP_END)이 이 순서를 따른다
-# 근로 1~2 · 월급 3 · 휴가 4~5 · 보험 6~8 · 노무 9~11 · 퇴사 12
+# 근로 1~2 · 월급 3 · 휴가 4~5 · 보험 6~8 · 노무 9~11 · 출근 12
 ORDER = ["labor-contract", "labor-hours", "labor-wage", "labor-leave", "labor-family",
          "ins-employ", "ins-pension", "ins-health",
          "labor-bully", "labor-safety", "labor-dismiss", "labor-retire"]
